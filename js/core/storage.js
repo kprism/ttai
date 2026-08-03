@@ -4,7 +4,8 @@
   const KEYS = {
     session: "ttai_demo_session",
     growth: "ttai_growth_records",
-    feedback: "ttai_teacher_feedbacks"
+    feedback: "ttai_teacher_feedbacks",
+    localQuest: "ttai_local_quest"
   };
 
   const gradeLabels = {
@@ -13,6 +14,8 @@
     m1: "중학교 1학년", m2: "중학교 2학년", m3: "중학교 3학년",
     h1: "고등학교 1학년", h2: "고등학교 2학년", h3: "고등학교 3학년"
   };
+
+  const gradeOrder = ["e1", "e2", "e3", "e4", "e5", "e6", "m1", "m2", "m3", "h1", "h2", "h3"];
 
   function read(key, fallback) {
     try {
@@ -83,6 +86,67 @@
     ];
   }
 
+  function createDefaultLocalQuest() {
+    return {
+      id: "changwon-school-road-01",
+      title: "학교 앞 통학로 안전 개선",
+      topic: "등교시간 학교 앞 횡단보도와 불법주차 문제를 조사하고 학생이 안전하게 통학할 수 있는 대안을 만들어보세요.",
+      teacherName: "김생각 선생님",
+      teacherConfirmed: true,
+      leaderId: "student-1",
+      team: [
+        { id: "student-1", name: "김생각", role: "팀리더", avatar: "🧑‍🎓" },
+        { id: "student-2", name: "박탐구", role: "현장조사", avatar: "👩‍🎓" },
+        { id: "student-3", name: "이협력", role: "인터뷰", avatar: "🧑‍🎓" },
+        { id: "student-4", name: "최실천", role: "자료정리", avatar: "👩‍🎓" }
+      ],
+      stage: 0,
+      stageLabels: [
+        "문제 바라보기", "문제 원인 찾기", "조사 설계", "대안 만들기", "시뮬레이션",
+        "팀 합의", "기관 연결", "담당자 참여 토의", "시정 반영결과"
+      ],
+      answers: {},
+      proposal: "등교시간 불법주차 집중단속, 횡단보도 앞 시야확보 구역 표시, 학생 안전지도 캠페인을 결합합니다.",
+      simulation: "등교시간 30분 동안 불법주차 차량이 40% 감소하고, 운전자 시야가 개선되는 상황을 가정해 장점과 부작용을 비교합니다.",
+      votes: {
+        "student-1": { agree: null, comment: "" },
+        "student-2": { agree: true, comment: "현장조사 결과와 잘 맞아요." },
+        "student-3": { agree: true, comment: "주민 인터뷰 내용도 반영됐어요." },
+        "student-4": { agree: null, comment: "비용과 담당기관을 더 확인하고 싶어요." }
+      },
+      institution: {
+        name: "창원시청",
+        department: "교통건설국 교통정책과",
+        officer: "박시정 주무관",
+        phone: "055-225-0000",
+        email: "traffic-demo@changwon.go.kr",
+        disclosed: false
+      },
+      officialDiscussion: {
+        started: false,
+        finished: false,
+        officerJoined: false,
+        notes: "",
+        aiQuestions: [
+          "학생 대안이 실제 행정절차에서 실행되려면 어떤 자료가 더 필요할까요?",
+          "담당기관의 예산·법령·현장 제약을 반영하면 대안을 어떻게 수정해야 할까요?",
+          "학생팀과 담당자가 각각 다음에 해야 할 행동은 무엇인가요?"
+        ]
+      },
+      municipalResult: {
+        status: "검토 전",
+        text: "",
+        officerName: "",
+        updatedAt: null
+      },
+      meeting: {
+        lastOpenedAt: null,
+        notes: []
+      },
+      updatedAt: new Date().toISOString()
+    };
+  }
+
   function getSession() {
     return read(KEYS.session, { role: "student", grade: "m2" });
   }
@@ -115,6 +179,33 @@
     };
     write(KEYS.feedback, feedbacks);
     return feedbacks[recordId];
+  }
+
+  function getLocalQuest() {
+    const stored = read(KEYS.localQuest, null);
+    if (!stored || typeof stored !== "object") return write(KEYS.localQuest, createDefaultLocalQuest());
+    return stored;
+  }
+
+  function saveLocalQuest(quest) {
+    return write(KEYS.localQuest, {
+      ...quest,
+      updatedAt: new Date().toISOString()
+    });
+  }
+
+  function updateLocalQuest(patch) {
+    const current = getLocalQuest();
+    const next = typeof patch === "function" ? patch({ ...current }) : { ...current, ...patch };
+    return saveLocalQuest(next);
+  }
+
+  function resetLocalQuest() {
+    return write(KEYS.localQuest, createDefaultLocalQuest());
+  }
+
+  function isLocalQuestEligible(grade) {
+    return gradeOrder.indexOf(grade) >= gradeOrder.indexOf("m2");
   }
 
   function formatDate(value, withTime = false) {
@@ -160,10 +251,16 @@
   window.TTAIStorage = {
     KEYS,
     gradeLabels,
+    gradeOrder,
     getSession,
     getGrowthRecords,
     getFeedbacks,
     saveFeedback,
+    getLocalQuest,
+    saveLocalQuest,
+    updateLocalQuest,
+    resetLocalQuest,
+    isLocalQuestEligible,
     formatDate,
     competenceSummary,
     teacherDraft,
