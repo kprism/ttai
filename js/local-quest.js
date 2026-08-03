@@ -76,6 +76,7 @@
     bindEvents() {
       byId("saveTeacherSetup").addEventListener("click", () => this.saveTeacherSetup());
       byId("submitAnswer").addEventListener("click", () => this.submitStageAnswer());
+      byId("confirmStageBtn").addEventListener("click", () => this.confirmStageAnswer());
       byId("agreeBtn").addEventListener("click", () => this.vote(true));
       byId("disagreeBtn").addEventListener("click", () => this.vote(false));
       byId("completeConsensusBtn").addEventListener("click", () => this.completeConsensusDemo());
@@ -180,49 +181,87 @@
 
     renderStudentWorkspace() {
       const workspace = byId("aiWorkspace");
+      const feedback = byId("aiFeedback");
+      const confirmButton = byId("confirmStageBtn");
+      const submitButton = byId("submitAnswer");
+      const input = byId("answerInput");
+
+      feedback.hidden = true;
+      confirmButton.hidden = true;
+
       if (!this.quest.teacherConfirmed) {
         workspace.innerHTML = '<div class="empty">선생님이 주제와 팀구성을 최종확정하면 AI 프로젝트 안내가 시작됩니다.</div>';
-        byId("answerInput").disabled = true;
-        byId("submitAnswer").disabled = true;
+        input.disabled = true;
+        submitButton.disabled = true;
         return;
       }
 
       if (this.quest.stage <= 4) {
         const prompt = STAGE_PROMPTS[this.quest.stage];
         const previous = this.quest.answers[prompt.key];
+        const pending = this.quest.pendingReview;
+        const waitingForConfirmation = Boolean(
+          pending && pending.stage === this.quest.stage && pending.key === prompt.key
+        );
+
         workspace.innerHTML = '<span class="ai-label">생각자국 AI 질문</span><h3>' + escapeHtml(prompt.title) + '</h3><p>' +
           escapeHtml(prompt.question) + '</p>' + (previous ? '<div class="saved-answer"><strong>내가 적은 생각</strong><p>' +
           escapeHtml(previous) + '</p></div>' : "");
-        byId("answerInput").value = previous || "";
-        byId("answerInput").disabled = this.session.role !== "student";
-        byId("submitAnswer").disabled = this.session.role !== "student";
-        byId("answerHint").textContent = "먼저 학생의 생각을 받고, AI는 칭찬과 작은 힌트만 준 뒤 다음 단계로 안내합니다.";
+
+        input.value = previous || "";
+        input.disabled = this.session.role !== "student" || waitingForConfirmation;
+        submitButton.disabled = this.session.role !== "student" || waitingForConfirmation;
+        submitButton.textContent = waitingForConfirmation ? "AI 피드백 확인 중" : "생각 제출하고 AI 피드백 보기";
+
+        if (waitingForConfirmation) {
+          feedback.innerHTML = '<strong>✨ 좋은 생각이에요.</strong><p>' + escapeHtml(pending.hint || prompt.hint) +
+            '</p><p class="review-note">피드백을 충분히 읽은 뒤 아래 확인 버튼을 누르면 다음 질문으로 넘어갑니다.</p>';
+          feedback.hidden = false;
+          confirmButton.hidden = this.session.role !== "student";
+          byId("answerHint").textContent = "AI 피드백은 자동으로 사라지지 않습니다. 읽은 뒤 직접 확인해 주세요.";
+        } else {
+          byId("answerHint").textContent = "학생의 생각을 먼저 받고, AI는 칭찬과 작은 힌트를 보여줍니다. 확인 버튼을 눌러야 다음 단계로 넘어갑니다.";
+        }
       } else {
         workspace.innerHTML = '<span class="ai-label">탐구 단계 완료</span><h3>이제 팀 합의와 기관 협력 단계입니다</h3><p>문제정의·원인·조사·대안·시뮬레이션 기록을 토대로 팀원 모두의 의견과 동의를 확인합니다.</p>';
-        byId("answerInput").value = "";
-        byId("answerInput").disabled = true;
-        byId("submitAnswer").disabled = true;
+        input.value = "";
+        input.disabled = true;
+        submitButton.disabled = true;
+        submitButton.textContent = "탐구 단계 완료";
       }
     }
 
     submitStageAnswer() {
-      if (this.quest.stage > 4) return;
+      if (this.quest.stage > 4 || this.quest.pendingReview) return;
       const text = byId("answerInput").value.trim();
       if (!text) {
         byId("answerInput").focus();
         return;
       }
+
       const prompt = STAGE_PROMPTS[this.quest.stage];
       this.quest.answers[prompt.key] = text;
-      byId("aiFeedback").innerHTML = '<strong>✨ 좋은 생각이에요.</strong><p>' + escapeHtml(prompt.hint) + '</p>';
-      byId("aiFeedback").hidden = false;
-      window.setTimeout(() => {
-        this.quest.stage = Math.min(5, this.quest.stage + 1);
-        if (prompt.key === "alternative") this.quest.proposal = text;
-        if (prompt.key === "simulation") this.quest.simulation = text;
-        this.save();
-        byId("aiFeedback").hidden = true;
-      }, 900);
+      if (prompt.key === "alternative") this.quest.proposal = text;
+      if (prompt.key === "simulation") this.quest.simulation = text;
+      this.quest.pendingReview = {
+        stage: this.quest.stage,
+        key: prompt.key,
+        answer: text,
+        hint: prompt.hint,
+        createdAt: new Date().toISOString()
+      };
+      this.save();
+      this.toast("AI 피드백이 도착했습니다. 읽은 뒤 확인 버튼을 눌러주세요.");
+    }
+
+    confirmStageAnswer() {
+      const pending = this.quest.pendingReview;
+      if (!pending || pending.stage !== this.quest.stage) return;
+
+      this.quest.stage = Math.min(5, this.quest.stage + 1);
+      this.quest.pendingReview = null;
+      this.save();
+      this.toast(this.quest.stage >= 5 ? "탐구단계를 마쳤습니다. 이제 팀 합의를 진행합니다." : "확인했습니다. 다음 질문으로 넘어갑니다.");
     }
 
     renderConsensus() {
