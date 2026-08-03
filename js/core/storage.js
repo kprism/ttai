@@ -10,6 +10,7 @@
 
   // 이 값이 바뀌면 기존 브라우저의 로컬퀘스트 시연 흔적만 1회 초기화됩니다.
   const LOCAL_QUEST_RESET_VERSION = "20260803-pristine-1";
+  let lastKnownLocalQuestRaw = localStorage.getItem(KEYS.localQuest);
 
   const gradeLabels = {
     e1: "초등학교 1학년", e2: "초등학교 2학년", e3: "초등학교 3학년",
@@ -30,7 +31,9 @@
   }
 
   function write(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    const serialized = JSON.stringify(value);
+    localStorage.setItem(key, serialized);
+    if (key === KEYS.localQuest) lastKnownLocalQuestRaw = serialized;
     return value;
   }
 
@@ -193,6 +196,7 @@
     const stored = read(KEYS.localQuest, null);
     const shouldReset = !stored || typeof stored !== "object" || stored.resetVersion !== LOCAL_QUEST_RESET_VERSION;
     if (shouldReset) return write(KEYS.localQuest, createDefaultLocalQuest());
+    lastKnownLocalQuestRaw = localStorage.getItem(KEYS.localQuest);
     return stored;
   }
 
@@ -212,6 +216,7 @@
 
   function resetLocalQuest() {
     localStorage.removeItem(KEYS.localQuest);
+    lastKnownLocalQuestRaw = null;
     return write(KEYS.localQuest, createDefaultLocalQuest());
   }
 
@@ -258,6 +263,30 @@
       `다음 목표인 ‘${record.nextGoal || "새로운 문제에 적용하기"}’를 위해 집에서 무엇을 해볼까?`
     ];
   }
+
+  function isLocalQuestPage() {
+    return /\/services\/local-quest\.html$/.test(window.location.pathname);
+  }
+
+  function reloadLocalQuestPageWhenChanged() {
+    if (!isLocalQuestPage()) return;
+    const currentRaw = localStorage.getItem(KEYS.localQuest);
+    if (currentRaw !== lastKnownLocalQuestRaw) {
+      lastKnownLocalQuestRaw = currentRaw;
+      window.location.reload();
+    }
+  }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== KEYS.localQuest || !isLocalQuestPage()) return;
+    lastKnownLocalQuestRaw = event.newValue;
+    window.location.reload();
+  });
+
+  window.addEventListener("focus", reloadLocalQuestPageWhenChanged);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") reloadLocalQuestPageWhenChanged();
+  });
 
   window.TTAIStorage = {
     KEYS,
