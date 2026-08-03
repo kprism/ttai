@@ -8,6 +8,9 @@
     localQuest: "ttai_local_quest"
   };
 
+  // 이 값이 바뀌면 기존 브라우저의 로컬퀘스트 시연 흔적만 1회 초기화됩니다.
+  const LOCAL_QUEST_RESET_VERSION = "20260803-pristine-1";
+
   const gradeLabels = {
     e1: "초등학교 1학년", e2: "초등학교 2학년", e3: "초등학교 3학년",
     e4: "초등학교 4학년", e5: "초등학교 5학년", e6: "초등학교 6학년",
@@ -88,14 +91,15 @@
 
   function createDefaultLocalQuest() {
     return {
+      resetVersion: LOCAL_QUEST_RESET_VERSION,
       id: "changwon-school-road-01",
       title: "학교 앞 통학로 안전 개선",
       topic: "등교시간 학교 앞 횡단보도와 불법주차 문제를 조사하고 학생이 안전하게 통학할 수 있는 대안을 만들어보세요.",
       teacherName: "김생각 선생님",
-      teacherConfirmed: true,
-      leaderId: "student-1",
+      teacherConfirmed: false,
+      leaderId: null,
       team: [
-        { id: "student-1", name: "김생각", role: "팀리더", avatar: "🧑‍🎓" },
+        { id: "student-1", name: "김생각", role: "팀원", avatar: "🧑‍🎓" },
         { id: "student-2", name: "박탐구", role: "현장조사", avatar: "👩‍🎓" },
         { id: "student-3", name: "이협력", role: "인터뷰", avatar: "🧑‍🎓" },
         { id: "student-4", name: "최실천", role: "자료정리", avatar: "👩‍🎓" }
@@ -106,13 +110,17 @@
         "팀 합의", "기관 연결", "담당자 참여 토의", "시정 반영결과"
       ],
       answers: {},
-      proposal: "등교시간 불법주차 집중단속, 횡단보도 앞 시야확보 구역 표시, 학생 안전지도 캠페인을 결합합니다.",
-      simulation: "등교시간 30분 동안 불법주차 차량이 40% 감소하고, 운전자 시야가 개선되는 상황을 가정해 장점과 부작용을 비교합니다.",
+      pendingReview: null,
+      proposal: "",
+      simulation: "",
+      peerThoughts: null,
+      sourcesUsed: [],
+      demoActiveVoterId: "student-1",
       votes: {
         "student-1": { agree: null, comment: "" },
-        "student-2": { agree: true, comment: "현장조사 결과와 잘 맞아요." },
-        "student-3": { agree: true, comment: "주민 인터뷰 내용도 반영됐어요." },
-        "student-4": { agree: null, comment: "비용과 담당기관을 더 확인하고 싶어요." }
+        "student-2": { agree: null, comment: "" },
+        "student-3": { agree: null, comment: "" },
+        "student-4": { agree: null, comment: "" }
       },
       institution: {
         name: "창원시청",
@@ -183,13 +191,15 @@
 
   function getLocalQuest() {
     const stored = read(KEYS.localQuest, null);
-    if (!stored || typeof stored !== "object") return write(KEYS.localQuest, createDefaultLocalQuest());
+    const shouldReset = !stored || typeof stored !== "object" || stored.resetVersion !== LOCAL_QUEST_RESET_VERSION;
+    if (shouldReset) return write(KEYS.localQuest, createDefaultLocalQuest());
     return stored;
   }
 
   function saveLocalQuest(quest) {
     return write(KEYS.localQuest, {
       ...quest,
+      resetVersion: LOCAL_QUEST_RESET_VERSION,
       updatedAt: new Date().toISOString()
     });
   }
@@ -201,6 +211,7 @@
   }
 
   function resetLocalQuest() {
+    localStorage.removeItem(KEYS.localQuest);
     return write(KEYS.localQuest, createDefaultLocalQuest());
   }
 
