@@ -77,4 +77,48 @@
       });
     }
   };
+
+  function initLocalQuestEntry() {
+    const gradeSelect = document.getElementById("gradeSelect");
+    const principle = document.querySelector(".principle");
+    if (!gradeSelect || !principle || document.getElementById("localQuestEntry")) return;
+
+    const gradeOrder = ["e1", "e2", "e3", "e4", "e5", "e6", "m1", "m2", "m3", "h1", "h2", "h3"];
+    let session = { role: "student", grade: gradeSelect.value || "m2" };
+    try {
+      session = JSON.parse(localStorage.getItem("ttai_demo_session")) || session;
+    } catch (error) {
+      session = { role: "student", grade: gradeSelect.value || "m2" };
+    }
+
+    const entry = document.createElement("section");
+    entry.id = "localQuestEntry";
+    entry.style.cssText = "margin-top:16px;padding:15px;border:1px solid rgba(0,177,216,.28);border-radius:17px;background:linear-gradient(145deg,#e9fbff,#fff);";
+    entry.innerHTML = '<strong style="display:block;color:#00288a">🗺️ 로컬퀘스트</strong>' +
+      '<p style="margin:7px 0 12px;color:#53657a;font-size:12px;line-height:1.55">교과에서 익힌 사고방법으로 지역의 실제 문제를 팀과 함께 해결합니다.</p>' +
+      '<a id="localQuestEntryLink" style="display:inline-flex;padding:10px 12px;border-radius:12px;color:#fff;background:linear-gradient(135deg,#00288a,#017bc5);font-size:12px;font-weight:900;text-decoration:none">로컬퀘스트 시작 →</a>' +
+      '<small id="localQuestEntryNote" style="display:block;margin-top:9px;color:#7b8b9e;line-height:1.45"></small>';
+    principle.insertAdjacentElement("afterend", entry);
+
+    function updateEntry() {
+      const grade = gradeSelect.value || session.grade || "m2";
+      const eligible = gradeOrder.indexOf(grade) >= gradeOrder.indexOf("m2");
+      const link = document.getElementById("localQuestEntryLink");
+      const note = document.getElementById("localQuestEntryNote");
+      entry.style.display = eligible ? "block" : "none";
+      link.href = "./local-quest.html?role=" + encodeURIComponent(session.role || "student") + "&grade=" + encodeURIComponent(grade);
+      note.textContent = eligible
+        ? "중학교 2학년부터 선생님이 확정한 주제와 팀으로 참여합니다."
+        : "중학교 2학년부터 이용할 수 있습니다.";
+    }
+
+    gradeSelect.addEventListener("change", updateEntry);
+    updateEntry();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLocalQuestEntry);
+  } else {
+    initLocalQuestEntry();
+  }
 })();
