@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>로컬퀘스트 초기화 | 생각자국 AI</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Pretendard,"Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{display:grid;place-items:center;padding:20px;color:#10233f;background:radial-gradient(circle at 15% 10%,rgba(0,177,216,.16),transparent 30%),#f5f8fc}.card{width:min(560px,100%);padding:34px;border:1px solid #dce7f1;border-radius:26px;text-align:center;background:#fff;box-shadow:0 18px 50px rgba(16,35,63,.13)}.icon{font-size:54px}.card h1{margin:15px 0 9px;color:#00288a;font-size:28px;letter-spacing:-.04em}.card p{margin:0;color:#53657a;line-height:1.7}.status{margin-top:19px;padding:13px;border-radius:15px;color:#157451;background:#effcf6;font-weight:850}.link{display:inline-flex;margin-top:18px;padding:12px 16px;border-radius:14px;color:#fff;background:linear-gradient(135deg,#00288a,#017bc5);text-decoration:none;font-weight:900}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="icon">🧹</div>
+    <h1>로컬퀘스트를 처음 상태로 되돌렸습니다</h1>
+    <p>학생 답변, AI 확인상태, 자료 출처, 팀 동의, 기관 연결, 담당자 토의와 시정 반영결과만 삭제했습니다.</p>
+    <div class="status" id="status">초기화 중입니다…</div>
+    <a class="link" id="goLink" href="./services/local-quest.html?role=teacher&grade=m2">선생님 최초 설정부터 시작 →</a>
+  </main>
+  <script>
+    (() => {
+      "use strict";
+      const pristineQuest = {
+        resetVersion: "20260803-pristine-1",
+        id: "changwon-school-road-01",
+        title: "학교 앞 통학로 안전 개선",
+        topic: "등교시간 학교 앞 횡단보도와 불법주차 문제를 조사하고 학생이 안전하게 통학할 수 있는 대안을 만들어보세요.",
+        teacherName: "김생각 선생님",
+        teacherConfirmed: false,
+        leaderId: null,
+        team: [
+          { id: "student-1", name: "김생각", role: "팀원", avatar: "🧑‍🎓" },
+          { id: "student-2", name: "박탐구", role: "현장조사", avatar: "👩‍🎓" },
+          { id: "student-3", name: "이협력", role: "인터뷰", avatar: "🧑‍🎓" },
+          { id: "student-4", name: "최실천", role: "자료정리", avatar: "👩‍🎓" }
+        ],
+        stage: 0,
+        stageLabels: ["문제 바라보기","문제 원인 찾기","조사 설계","대안 만들기","시뮬레이션","팀 합의","기관 연결","담당자 참여 토의","시정 반영결과"],
+        answers: {},
+        pendingReview: null,
+        proposal: "",
+        simulation: "",
+        peerThoughts: null,
+        sourcesUsed: [],
+        demoActiveVoterId: "student-1",
+        votes: {
+          "student-1": { agree: null, comment: "" },
+          "student-2": { agree: null, comment: "" },
+          "student-3": { agree: null, comment: "" },
+          "student-4": { agree: null, comment: "" }
+        },
+        institution: {
+          name: "창원시청",
+          department: "교통건설국 교통정책과",
+          officer: "박시정 주무관",
+          phone: "055-225-0000",
+          email: "traffic-demo@changwon.go.kr",
+          disclosed: false
+        },
+        officialDiscussion: {
+          started: false,
+          finished: false,
+          officerJoined: false,
+          notes: "",
+          aiQuestions: [
+            "학생 대안이 실제 행정절차에서 실행되려면 어떤 자료가 더 필요할까요?",
+            "담당기관의 예산·법령·현장 제약을 반영하면 대안을 어떻게 수정해야 할까요?",
+            "학생팀과 담당자가 각각 다음에 해야 할 행동은 무엇인가요?"
+          ]
+        },
+        municipalResult: { status: "검토 전", text: "", officerName: "", updatedAt: null },
+        meeting: { lastOpenedAt: null, notes: [] },
+        updatedAt: new Date().toISOString()
+      };
+
+      localStorage.removeItem("ttai_local_quest");
+      localStorage.setItem("ttai_local_quest", JSON.stringify(pristineQuest));
+      document.getElementById("status").textContent = "초기화 완료 · 다른 학습기록은 유지되었습니다.";
+    })();
+  </script>
+</body>
+</html>
