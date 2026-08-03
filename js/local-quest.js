@@ -34,6 +34,73 @@
     }
   ];
 
+  const RESOURCE_LIBRARY = [
+    {
+      id: "taas-gis",
+      title: "교통사고 GIS 분석 시스템",
+      organization: "한국도로교통공단 TAAS",
+      url: "https://taas.koroad.or.kr/web/shp/sbm/initGisAnals.do?menuId=WEB_KMP_GIS_TAS",
+      summary: "지역별 교통사고 위치, 어린이 사고다발지점과 보호구역 현황을 지도에서 살펴볼 수 있습니다.",
+      keywords: ["교통사고", "지도", "스쿨존", "어린이", "횡단보도", "사고다발"],
+      stages: ["firstThought", "causes", "research", "alternative", "simulation"]
+    },
+    {
+      id: "taas-statistics",
+      title: "교통사고 주요 통계",
+      organization: "한국도로교통공단 TAAS",
+      url: "https://taas.koroad.or.kr/sta/acs/gus/selectTfcacdOccrrncSttus.do?menuId=WEB_KMP_MIM",
+      summary: "어린이 교통사고와 어린이보호구역 사고 등 공식 통계를 확인할 수 있습니다.",
+      keywords: ["통계", "어린이", "교통사고", "보호구역", "근거", "수치"],
+      stages: ["firstThought", "causes", "research", "alternative"]
+    },
+    {
+      id: "child-taas",
+      title: "어린이 TAAS 교통안전지도·보고서",
+      organization: "한국도로교통공단",
+      url: "https://taas.koroad.or.kr/childTaas/main.do",
+      summary: "학생 눈높이에서 교통안전지도를 만들고 조사결과를 보고서로 정리할 수 있습니다.",
+      keywords: ["학생", "교통안전지도", "보고서", "현장조사", "학교", "안전"],
+      stages: ["research", "alternative", "simulation"]
+    },
+    {
+      id: "school-zone-law",
+      title: "어린이·노인 및 장애인 보호구역 지정·관리 규칙",
+      organization: "국가법령정보센터",
+      url: "https://www.law.go.kr/LSW/lsInfoP.do?ancYnChk=0&lsId=011331",
+      summary: "보호구역 지정과 관리 시 조사해야 하는 통행량, 주차수요, 안전시설과 사고현황 등의 법적 기준을 확인할 수 있습니다.",
+      keywords: ["법령", "보호구역", "주차", "통행량", "안전시설", "행정", "규칙"],
+      stages: ["causes", "research", "alternative", "simulation"]
+    }
+  ];
+
+  const DEFAULT_PEER_THOUGHTS = {
+    firstThought: [
+      { memberId: "student-2", name: "박탐구", avatar: "👩‍🎓", text: "횡단보도 가까이에 차가 서 있으면 운전자와 학생이 서로를 늦게 발견하는 것이 가장 위험하다고 생각해." },
+      { memberId: "student-3", name: "이협력", avatar: "🧑‍🎓", text: "학생이 몰리는 등교시간과 일반 시간의 위험 정도가 다를 것 같아. 시간대를 나눠 봐야 해." },
+      { memberId: "student-4", name: "최실천", avatar: "👩‍🎓", text: "불편하다는 느낌만 말하지 말고 실제로 위험했던 위치와 상황을 지도에 표시하면 좋겠어." }
+    ],
+    causes: [
+      { memberId: "student-2", name: "박탐구", avatar: "👩‍🎓", text: "학부모 차량이 잠깐 정차할 공간이 부족해서 횡단보도 근처에 차가 몰리는 것 같아." },
+      { memberId: "student-3", name: "이협력", avatar: "🧑‍🎓", text: "운전자에게 학교 앞이라는 표시가 잘 보이지 않거나 단속시간을 모르는 것도 원인일 수 있어." },
+      { memberId: "student-4", name: "최실천", avatar: "👩‍🎓", text: "학생들이 정해진 통학로가 아닌 여러 방향으로 건너는 행동도 함께 살펴봐야 해." }
+    ],
+    research: [
+      { memberId: "student-2", name: "박탐구", avatar: "👩‍🎓", text: "등교시간 30분 동안 불법주차 차량 수와 정차시간을 날짜별로 세어보자." },
+      { memberId: "student-3", name: "이협력", avatar: "🧑‍🎓", text: "학생·학부모·운전자에게 각각 짧은 인터뷰를 해서 관점 차이를 비교하면 좋겠어." },
+      { memberId: "student-4", name: "최실천", avatar: "👩‍🎓", text: "TAAS 지도에서 학교 주변 사고와 어린이 사고다발지점이 있는지 확인해보자." }
+    ],
+    alternative: [
+      { memberId: "student-2", name: "박탐구", avatar: "👩‍🎓", text: "횡단보도 앞 시야확보 구역을 더 분명하게 표시하고 등교시간 집중단속을 함께 하면 좋겠어." },
+      { memberId: "student-3", name: "이협력", avatar: "🧑‍🎓", text: "학부모 승하차 구역을 조금 떨어진 곳에 만들면 불법정차 원인을 줄일 수 있을 것 같아." },
+      { memberId: "student-4", name: "최실천", avatar: "👩‍🎓", text: "학생이 직접 만든 안전지도를 학교와 시청에 공유하고 한 달 뒤 변화를 다시 조사하자." }
+    ],
+    simulation: [
+      { memberId: "student-2", name: "박탐구", avatar: "👩‍🎓", text: "단속만 강화하면 차량이 골목으로 이동해 다른 위험이 생길 수 있어. 주변 도로도 함께 확인해야 해." },
+      { memberId: "student-3", name: "이협력", avatar: "🧑‍🎓", text: "승하차 구역이 너무 멀면 이용하지 않을 수 있으니 이동거리와 안내방법을 시험해봐야 해." },
+      { memberId: "student-4", name: "최실천", avatar: "👩‍🎓", text: "시범운영 전후의 차량 수와 학생 체감안전도를 같은 방법으로 조사하면 효과를 비교할 수 있어." }
+    ]
+  };
+
   function byId(id) {
     return document.getElementById(id);
   }
@@ -60,12 +127,29 @@
   class LocalQuestApp {
     constructor() {
       this.session = readRole();
-      this.quest = window.TTAIStorage.getLocalQuest();
+      this.quest = this.normalizeQuest(window.TTAIStorage.getLocalQuest());
+      this.searchQuery = "";
       this.stream = null;
       this.cameraOn = false;
       this.micOn = true;
+      window.TTAIStorage.saveLocalQuest(this.quest);
       this.bindEvents();
       this.render();
+    }
+
+    normalizeQuest(quest) {
+      const team = Array.isArray(quest.team) ? quest.team : [];
+      const validVoter = team.some((member) => member.id === quest.demoActiveVoterId)
+        ? quest.demoActiveVoterId
+        : (team[0]?.id || "student-1");
+      return {
+        ...quest,
+        answers: quest.answers || {},
+        votes: quest.votes || {},
+        peerThoughts: quest.peerThoughts || DEFAULT_PEER_THOUGHTS,
+        sourcesUsed: Array.isArray(quest.sourcesUsed) ? quest.sourcesUsed : [],
+        demoActiveVoterId: validVoter
+      };
     }
 
     save() {
@@ -73,10 +157,31 @@
       this.render();
     }
 
+    currentPrompt() {
+      return this.quest.stage <= 4 ? STAGE_PROMPTS[this.quest.stage] : null;
+    }
+
     bindEvents() {
       byId("saveTeacherSetup").addEventListener("click", () => this.saveTeacherSetup());
       byId("submitAnswer").addEventListener("click", () => this.submitStageAnswer());
       byId("confirmStageBtn").addEventListener("click", () => this.confirmStageAnswer());
+      byId("materialSearchBtn").addEventListener("click", () => this.searchMaterials());
+      byId("materialSearchInput").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          this.searchMaterials();
+        }
+      });
+      byId("materialSearchResults").addEventListener("click", (event) => {
+        const link = event.target.closest("[data-source-id]");
+        if (!link) return;
+        this.recordSource(link.dataset.sourceId);
+      });
+      byId("voteMemberSelect").addEventListener("change", (event) => {
+        this.quest.demoActiveVoterId = event.target.value;
+        window.TTAIStorage.saveLocalQuest(this.quest);
+        this.renderConsensus();
+      });
       byId("agreeBtn").addEventListener("click", () => this.vote(true));
       byId("disagreeBtn").addEventListener("click", () => this.vote(false));
       byId("completeConsensusBtn").addEventListener("click", () => this.completeConsensusDemo());
@@ -89,7 +194,8 @@
       byId("micBtn").addEventListener("click", () => this.toggleMic());
       byId("resetQuestBtn").addEventListener("click", () => {
         if (window.confirm("로컬퀘스트 시연기록을 처음 상태로 되돌릴까요?")) {
-          this.quest = window.TTAIStorage.resetLocalQuest();
+          this.quest = this.normalizeQuest(window.TTAIStorage.resetLocalQuest());
+          this.searchQuery = "";
           this.render();
         }
       });
@@ -185,9 +291,13 @@
       const confirmButton = byId("confirmStageBtn");
       const submitButton = byId("submitAnswer");
       const input = byId("answerInput");
+      const peerWrap = byId("peerThoughtsWrap");
+      const searchWrap = byId("materialSearchWrap");
 
       feedback.hidden = true;
       confirmButton.hidden = true;
+      peerWrap.hidden = true;
+      searchWrap.hidden = true;
 
       if (!this.quest.teacherConfirmed) {
         workspace.innerHTML = '<div class="empty">선생님이 주제와 팀구성을 최종확정하면 AI 프로젝트 안내가 시작됩니다.</div>';
@@ -197,7 +307,7 @@
       }
 
       if (this.quest.stage <= 4) {
-        const prompt = STAGE_PROMPTS[this.quest.stage];
+        const prompt = this.currentPrompt();
         const previous = this.quest.answers[prompt.key];
         const pending = this.quest.pendingReview;
         const waitingForConfirmation = Boolean(
@@ -222,6 +332,11 @@
         } else {
           byId("answerHint").textContent = "학생의 생각을 먼저 받고, AI는 칭찬과 작은 힌트를 보여줍니다. 확인 버튼을 눌러야 다음 단계로 넘어갑니다.";
         }
+
+        peerWrap.hidden = false;
+        searchWrap.hidden = false;
+        this.renderPeerThoughts(prompt.key, Boolean(previous));
+        this.renderSourceLibrary(prompt.key);
       } else {
         workspace.innerHTML = '<span class="ai-label">탐구 단계 완료</span><h3>이제 팀 합의와 기관 협력 단계입니다</h3><p>문제정의·원인·조사·대안·시뮬레이션 기록을 토대로 팀원 모두의 의견과 동의를 확인합니다.</p>';
         input.value = "";
@@ -229,6 +344,88 @@
         submitButton.disabled = true;
         submitButton.textContent = "탐구 단계 완료";
       }
+    }
+
+    renderPeerThoughts(stageKey, ownAnswerSubmitted) {
+      const container = byId("peerThoughtCards");
+      if (!ownAnswerSubmitted) {
+        container.innerHTML = '<div class="peer-lock"><span>🔒</span><div><strong>내 생각을 먼저 남겨보세요</strong><p>다른 친구의 답을 따라 쓰지 않도록, 내 생각을 제출한 뒤 팀원의 생각이 열립니다.</p></div></div>';
+        return;
+      }
+
+      const thoughts = this.quest.peerThoughts?.[stageKey] || [];
+      container.innerHTML = thoughts.map((thought) => (
+        '<article class="peer-card"><div class="peer-head"><span>' + escapeHtml(thought.avatar) + '</span><strong>' +
+        escapeHtml(thought.name) + '</strong></div><p>' + escapeHtml(thought.text) + '</p></article>'
+      )).join("") || '<p class="state-text">아직 이 단계에 친구가 남긴 생각이 없습니다.</p>';
+    }
+
+    searchMaterials() {
+      this.searchQuery = byId("materialSearchInput").value.trim();
+      const prompt = this.currentPrompt();
+      if (!prompt) return;
+      this.renderSourceLibrary(prompt.key);
+    }
+
+    renderSourceLibrary(stageKey) {
+      const query = this.searchQuery.toLowerCase();
+      byId("materialSearchInput").value = this.searchQuery;
+      const resources = RESOURCE_LIBRARY.filter((source) => {
+        const haystack = [source.title, source.organization, source.summary, ...source.keywords].join(" ").toLowerCase();
+        const queryMatched = !query || query.split(/\s+/).every((word) => haystack.includes(word));
+        return queryMatched && (source.stages.includes(stageKey) || Boolean(query));
+      });
+
+      const usedIds = new Set((this.quest.sourcesUsed || []).map((source) => source.id));
+      byId("materialSearchResults").innerHTML = resources.length
+        ? resources.map((source) => (
+          '<article class="source-result"><div class="source-copy"><span>' + escapeHtml(source.organization) + '</span><strong>' +
+          escapeHtml(source.title) + '</strong><p>' + escapeHtml(source.summary) + '</p></div><div class="source-actions">' +
+          (usedIds.has(source.id) ? '<em>✓ 출처 저장됨</em>' : '') + '<a href="' + escapeHtml(source.url) +
+          '" target="_blank" rel="noopener" data-source-id="' + escapeHtml(source.id) + '">자료 열기 ↗</a></div></article>'
+        )).join("")
+        : '<div class="search-empty">검색어와 맞는 자료가 없습니다. ‘교통사고’, ‘보호구역’, ‘통계’, ‘법령’을 검색해보세요.</div>';
+
+      this.renderUsedSources("usedSourceList");
+    }
+
+    recordSource(sourceId) {
+      const source = RESOURCE_LIBRARY.find((item) => item.id === sourceId);
+      if (!source) return;
+      const prompt = this.currentPrompt();
+      const existing = (this.quest.sourcesUsed || []).find((item) => item.id === sourceId);
+      if (existing) {
+        existing.lastClickedAt = new Date().toISOString();
+        existing.clickCount = (existing.clickCount || 1) + 1;
+      } else {
+        this.quest.sourcesUsed.push({
+          id: source.id,
+          title: source.title,
+          organization: source.organization,
+          url: source.url,
+          summary: source.summary,
+          stageKey: prompt?.key || "project",
+          stageTitle: prompt?.title || "프로젝트",
+          clickedAt: new Date().toISOString(),
+          lastClickedAt: new Date().toISOString(),
+          clickCount: 1
+        });
+      }
+      window.TTAIStorage.saveLocalQuest(this.quest);
+      if (prompt) this.renderSourceLibrary(prompt.key);
+      this.toast("자료 링크가 대안의 출처로 자동 저장됐습니다.");
+    }
+
+    renderUsedSources(targetId) {
+      const target = byId(targetId);
+      if (!target) return;
+      const sources = this.quest.sourcesUsed || [];
+      target.innerHTML = sources.length
+        ? '<strong class="used-title">📚 대안 출처로 저장된 자료</strong><div class="used-source-grid">' + sources.map((source, index) => (
+          '<a href="' + escapeHtml(source.url) + '" target="_blank" rel="noopener"><span>[' + (index + 1) + '] ' +
+          escapeHtml(source.organization) + '</span><b>' + escapeHtml(source.title) + '</b></a>'
+        )).join("") + '</div>'
+        : '<p class="source-guide">자료 링크를 열어 확인하면 이곳에 자동 저장되고, 최종대안의 출처로 연결됩니다.</p>';
     }
 
     submitStageAnswer() {
@@ -239,7 +436,7 @@
         return;
       }
 
-      const prompt = STAGE_PROMPTS[this.quest.stage];
+      const prompt = this.currentPrompt();
       this.quest.answers[prompt.key] = text;
       if (prompt.key === "alternative") this.quest.proposal = text;
       if (prompt.key === "simulation") this.quest.simulation = text;
@@ -251,7 +448,7 @@
         createdAt: new Date().toISOString()
       };
       this.save();
-      this.toast("AI 피드백이 도착했습니다. 읽은 뒤 확인 버튼을 눌러주세요.");
+      this.toast("AI 피드백과 친구들의 생각이 열렸습니다. 읽은 뒤 확인 버튼을 눌러주세요.");
     }
 
     confirmStageAnswer() {
@@ -260,17 +457,26 @@
 
       this.quest.stage = Math.min(5, this.quest.stage + 1);
       this.quest.pendingReview = null;
+      this.searchQuery = "";
       this.save();
       this.toast(this.quest.stage >= 5 ? "탐구단계를 마쳤습니다. 이제 팀 합의를 진행합니다." : "확인했습니다. 다음 질문으로 넘어갑니다.");
     }
 
     renderConsensus() {
       const votes = this.quest.votes || {};
-      const agreed = Object.values(votes).filter((vote) => vote.agree === true).length;
+      const agreed = this.quest.team.filter((member) => votes[member.id]?.agree === true).length;
       const total = this.quest.team.length;
+      const selectedId = this.quest.demoActiveVoterId || this.quest.team[0]?.id;
+      const selectedVote = votes[selectedId] || { agree: null, comment: "" };
+
       byId("proposalText").textContent = this.quest.proposal;
       byId("simulationText").textContent = this.quest.simulation;
       byId("voteCount").textContent = agreed + '/' + total + '명 동의';
+      byId("voteMemberSelect").innerHTML = this.quest.team.map((member) => (
+        '<option value="' + escapeHtml(member.id) + '"' + (member.id === selectedId ? " selected" : "") + '>' +
+        escapeHtml(member.name) + ' · ' + escapeHtml(member.role) + '</option>'
+      )).join("");
+      byId("voteComment").value = selectedVote.comment || "";
       byId("voteList").innerHTML = this.quest.team.map((member) => {
         const vote = votes[member.id] || { agree: null, comment: "" };
         const state = vote.agree === true ? "동의" : vote.agree === false ? "보완 요청" : "의견 대기";
@@ -278,20 +484,36 @@
           (vote.agree === true ? "yes" : vote.agree === false ? "no" : "wait") + '">' + state + '</span><p>' +
           escapeHtml(vote.comment || "아직 의견을 남기지 않았습니다.") + '</p></article>';
       }).join("");
-      const visible = this.quest.stage >= 5;
-      byId("consensusSection").hidden = !visible;
+      this.renderUsedSources("proposalSources");
+      byId("consensusSection").hidden = this.quest.stage < 5;
       byId("completeConsensusBtn").hidden = !["teacher", "admin"].includes(this.session.role);
-      if (agreed === total && total > 0 && !this.quest.institution.disclosed) {
+    }
+
+    updateConsensusState() {
+      const allAgreed = this.quest.team.length > 0 && this.quest.team.every((member) => this.quest.votes[member.id]?.agree === true);
+      if (allAgreed) {
         this.quest.institution.disclosed = true;
         this.quest.stage = Math.max(this.quest.stage, 6);
-        window.TTAIStorage.saveLocalQuest(this.quest);
       }
+      return allAgreed;
     }
 
     vote(agree) {
+      const voterId = byId("voteMemberSelect").value || this.quest.demoActiveVoterId;
       const comment = byId("voteComment").value.trim();
-      this.quest.votes["student-1"] = { agree, comment: comment || (agree ? "현재 대안에 동의합니다." : "추가 보완이 필요합니다.") };
+      this.quest.demoActiveVoterId = voterId;
+      this.quest.votes[voterId] = {
+        agree,
+        comment: comment || (agree ? "현재 대안에 동의합니다." : "추가 보완이 필요합니다.")
+      };
+
+      const allAgreed = this.updateConsensusState();
+      if (!allAgreed) {
+        const nextWaiting = this.quest.team.find((member) => this.quest.votes[member.id]?.agree == null);
+        if (nextWaiting) this.quest.demoActiveVoterId = nextWaiting.id;
+      }
       this.save();
+      this.toast(allAgreed ? "팀 전원 동의가 완료되어 기관 담당정보가 공개됐습니다." : "선택한 학생의 의견을 저장했습니다.");
     }
 
     completeConsensusDemo() {
@@ -300,8 +522,7 @@
         this.quest.votes[member.id].agree = true;
         if (!this.quest.votes[member.id].comment) this.quest.votes[member.id].comment = "토의 후 최종대안에 동의했습니다.";
       });
-      this.quest.institution.disclosed = true;
-      this.quest.stage = Math.max(this.quest.stage, 6);
+      this.updateConsensusState();
       this.save();
       this.toast("팀 전원 합의가 확인되어 기관 담당정보가 공개됐습니다.");
     }
