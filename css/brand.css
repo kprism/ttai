@@ -1,0 +1,39 @@
+:root {
+  /* 생각자국 AI 로고 기반 브랜드 컬러 */
+  --brand-navy-950: #02134d;
+  --brand-navy-800: #00288a;
+  --brand-blue-650: #017bc5;
+  --brand-blue-500: #007fdd;
+  --brand-cyan-500: #00b1d8;
+  --brand-orange-400: #fda634;
+
+  /* 확장 색상 */
+  --brand-blue-100: #eaf4ff;
+  --brand-cyan-100: #e9fbff;
+  --brand-orange-100: #fff5e5;
+
+  /* 화면 기본색 */
+  --surface-page: #f5f8fc;
+  --surface-card: #ffffff;
+  --surface-soft: #eef4fa;
+
+  --text-primary: #10233f;
+  --text-secondary: #53657a;
+  --text-muted: #7b8b9e;
+
+  --border-soft: #dce7f1;
+  --border-focus: #017bc5;
+
+  --success: #1f9d68;
+  --warning: #f09a24;
+  --danger: #dc4c64;
+
+  --shadow-soft: 0 12px 35px rgba(0, 40, 138, 0.1);
+  --shadow-card: 0 8px 24px rgba(16, 35, 63, 0.08);
+
+  --radius-small: 12px;
+  --radius-medium: 20px;
+  --radius-large: 28px;
+
+  --content-width: 1440px;
+}
