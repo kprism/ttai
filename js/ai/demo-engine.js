@@ -56,6 +56,7 @@
       this.currentStepId = null;
       this.completed = false;
       this.history = [];
+      this.originalQuestion = "";
       this.renderWelcome();
     }
 
@@ -95,6 +96,7 @@
       this.currentStepId = this.scenario.start;
       this.completed = false;
       this.history = [];
+      this.originalQuestion = cleanQuestion;
       this.elements.chat.replaceChildren();
       this.appendStudent(cleanQuestion);
       this.appendAI(
@@ -148,8 +150,16 @@
 
     choose(choice) {
       if (this.completed) return;
+      const step = this.scenario.steps[this.currentStepId] || {};
       this.appendStudent(choice.label);
-      this.history.push({ step: this.currentStepId, answer: choice.label, mode: "choice" });
+      this.history.push({
+        step: this.currentStepId,
+        phase: step.phase || "학습 진행",
+        prompt: step.prompt || "",
+        answer: choice.label,
+        mode: "choice",
+        skills: step.skills || []
+      });
       this.elements.choices.replaceChildren();
       this.appendAI(choice.response, "학생의 선택을 바탕으로 다음 단계를 조정했어요");
       this.goNext(choice.next);
@@ -159,10 +169,7 @@
       const cleanText = safeText(text).trim();
       if (!cleanText) return false;
 
-      if (!this.scenario) {
-        return this.start(cleanText);
-      }
-
+      if (!this.scenario) return this.start(cleanText);
       if (this.completed) {
         this.start(cleanText);
         return true;
@@ -170,7 +177,14 @@
 
       const step = this.scenario.steps[this.currentStepId];
       this.appendStudent(cleanText);
-      this.history.push({ step: this.currentStepId, answer: cleanText, mode: "text" });
+      this.history.push({
+        step: this.currentStepId,
+        phase: step.phase || "학습 진행",
+        prompt: step.prompt || "",
+        answer: cleanText,
+        mode: "text",
+        skills: step.skills || []
+      });
       this.elements.choices.replaceChildren();
       this.appendAI(
         step.freeResponse || "네 생각을 확인했어. 이제 다음 단계에서 그 생각을 새로운 상황에 적용해보자.",
@@ -257,17 +271,25 @@
         scenarioId: this.scenario.id,
         subject: this.scenario.subject,
         topic: this.scenario.topic,
+        question: this.originalQuestion,
+        understood: this.scenario.understood,
         title: this.scenario.growth.title,
         summary: this.scenario.growth.summary,
         strengths: this.scenario.growth.strengths,
         nextGoal: this.scenario.growth.nextGoal,
-        responseCount: this.history.length
+        responseCount: this.history.length,
+        thinkingFlow: this.history.map((item) => item.phase),
+        conversation: this.history.map((item) => ({
+          phase: item.phase,
+          prompt: item.prompt,
+          answer: item.answer,
+          mode: item.mode,
+          skills: item.skills
+        }))
       });
       localStorage.setItem(key, JSON.stringify(records.slice(0, 20)));
       this.elements.savedNotice.hidden = false;
-      window.setTimeout(() => {
-        this.elements.savedNotice.hidden = true;
-      }, 3200);
+      window.setTimeout(() => { this.elements.savedNotice.hidden = true; }, 3200);
     }
 
     reset() {
@@ -275,6 +297,7 @@
       this.currentStepId = null;
       this.completed = false;
       this.history = [];
+      this.originalQuestion = "";
       this.elements.choices.replaceChildren();
       this.renderWelcome();
       this.elements.input.focus();
