@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#00288a">
+  <meta name="description" content="질문의 여섯 가지 렌즈를 배우고 직접 소크라테스식 질문을 만들며 훈련하는 생각자국 AI 학습 사이트">
+  <title>소크라테스 질문학교 | 생각자국 AI</title>
+  <link rel="stylesheet" href="../css/brand.css?v=20260806q">
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Pretendard,"Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#10233f}button,textarea,select{font:inherit}button{cursor:pointer}body{background:radial-gradient(circle at 4% 6%,rgba(0,177,216,.14),transparent 25%),radial-gradient(circle at 96% 92%,rgba(253,166,52,.13),transparent 28%),#f4f8fc}.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:68px;padding:9px clamp(12px,3vw,40px);border-bottom:1px solid rgba(220,231,241,.92);background:rgba(255,255,255,.91);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand img{display:block;width:clamp(148px,18vw,210px)}.back{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border:1px solid #dce7f1;border-radius:12px;color:#53657a;background:#fff;font-size:13px;font-weight:850;text-decoration:none}.top-progress{display:flex;align-items:center;gap:10px;padding:8px 11px;border:1px solid #dce7f1;border-radius:14px;background:#fff}.top-progress strong{color:#00288a;font-size:13px}.top-track{width:92px;height:8px;overflow:hidden;border-radius:999px;background:#e4edf5}.top-bar{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#017bc5,#00b1d8,#fda634);transition:.3s}.page{width:min(1560px,100%);margin:0 auto;padding:17px clamp(10px,2.5vw,32px) 45px}.hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px;margin-bottom:15px;padding:clamp(24px,4vw,39px);border-radius:29px;color:#fff;background:linear-gradient(135deg,#031447,#00288a 58%,#017bc5);box-shadow:0 16px 42px rgba(0,40,138,.18)}.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}.hero:before{right:105px;top:-95px;width:230px;height:230px}.hero:after{right:-35px;bottom:-120px;width:270px;height:270px}.hero>*{position:relative;z-index:1}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.13);font-size:12px;font-weight:850}.hero h1{margin:13px 0 9px;font-size:clamp(29px,4.5vw,48px);letter-spacing:-.055em}.hero p{max-width:820px;margin:0;color:rgba(255,255,255,.79);font-size:clamp(14px,1.6vw,17px);line-height:1.75}.hero-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:19px}.hero-actions button,.hero-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:0 16px;border:0;border-radius:14px;font-weight:900;text-decoration:none}.hero-actions button{color:#00288a;background:#fff}.hero-actions a{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18)}.hero-icon{display:grid;place-items:center;width:112px;height:112px;border-radius:34px;background:linear-gradient(145deg,#fff,#e7f8ff);box-shadow:17px 20px 38px rgba(0,0,0,.2),inset -8px -8px 18px rgba(0,40,138,.08);font-size:61px;transform:rotate(-4deg)}.layout{display:grid;grid-template-columns:260px minmax(460px,1fr) 285px;gap:14px;align-items:start}.panel,.main-card{border:1px solid #dce7f1;border-radius:23px;background:#fff;box-shadow:0 8px 24px rgba(16,35,63,.07)}.panel{padding:17px}.panel h2,.main-card h2{margin:0;font-size:18px;letter-spacing:-.035em}.panel>p,.section-head p{margin:6px 0 0;color:#68798c;font-size:13px;line-height:1.55}.sticky{position:sticky;top:85px}.learner-box{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;margin:13px 0;padding:12px;border-radius:16px;background:#f4f8fc}.learner-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:#fff;box-shadow:4px 6px 11px rgba(0,40,138,.1);font-size:21px}.learner-box strong,.learner-box small{display:block}.learner-box small{margin-top:3px;color:#7b8b9e}.lesson-nav{display:grid;gap:7px}.lesson-button{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:9px;width:100%;padding:9px 10px;text-align:left;border:1px solid #e1e9f1;border-radius:13px;color:#29425f;background:#fff;transition:.16s}.lesson-button:hover,.lesson-button.active{border-color:#017bc5;background:#eef9ff;transform:translateY(-1px)}.lesson-button.done{border-color:#bfe6d4;background:#f0fcf6}.lesson-no{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;color:#017bc5;background:#eaf4ff;font-weight:950}.lesson-button.done .lesson-no{color:#157451;background:#dff8ea}.lesson-copy strong,.lesson-copy small{display:block}.lesson-copy strong{font-size:13px}.lesson-copy small{margin-top:2px;color:#7b8b9e;font-size:10px}.done-mark{color:#1f9d68;font-size:14px;font-weight:950}.main-card{overflow:hidden}.tabs{display:flex;gap:6px;padding:13px;border-bottom:1px solid #e3ebf3;background:#fbfdff}.tab{flex:1;min-height:42px;border:1px solid #dce7f1;border-radius:12px;color:#53657a;background:#fff;font-weight:900}.tab.active{border-color:#00288a;color:#fff;background:linear-gradient(135deg,#00288a,#017bc5)}.tab-panel{padding:21px}.tab-panel[hidden]{display:none}.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.lens-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;color:#00288a;background:#eaf4ff;font-size:12px;font-weight:900}.lesson-stage{margin-top:16px}.lesson-visual{display:grid;grid-template-columns:80px 1fr;gap:15px;align-items:center;padding:18px;border-radius:20px;background:linear-gradient(145deg,#eaf4ff,#fff)}.lesson-emoji{display:grid;place-items:center;width:72px;height:72px;border-radius:23px;background:#fff;box-shadow:8px 11px 20px rgba(0,40,138,.12);font-size:38px}.lesson-visual h3{margin:0 0 5px;font-size:22px}.lesson-visual p{margin:0;color:#53657a;line-height:1.65}.compare{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}.question-card{padding:16px;border-radius:18px}.question-card.weak{border:1px solid #f1cbd1;background:#fff6f7}.question-card.strong{border:1px solid #bfe5d3;background:#f2fcf7}.question-card small{font-weight:900}.question-card.weak small{color:#b53c50}.question-card.strong small{color:#157451}.question-card p{margin:8px 0 0;font-size:15px;font-weight:850;line-height:1.55}.lesson-points{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}.point{padding:13px;border:1px solid #e0e9f1;border-radius:16px;background:#fff}.point b{display:block;color:#00288a;font-size:13px}.point span{display:block;margin-top:5px;color:#68798c;font-size:12px;line-height:1.5}.lesson-actions{display:flex;justify-content:space-between;gap:9px;margin-top:17px}.lesson-actions button{min-height:43px;padding:0 15px;border-radius:13px;font-weight:900}.secondary{border:1px solid #dce7f1;color:#53657a;background:#fff}.primary{border:0;color:#fff;background:linear-gradient(135deg,#00288a,#017bc5);box-shadow:0 8px 18px rgba(0,40,138,.16)}.challenge-head{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin-top:15px}.field label{display:block;margin-bottom:6px;color:#53657a;font-size:12px;font-weight:900}.field select{width:100%;min-height:44px;padding:0 12px;border:1px solid #cfdde9;border-radius:13px;color:#10233f;background:#fff;font-weight:800}.new-topic{min-height:44px;padding:0 13px;border:1px solid #dce7f1;border-radius:13px;color:#00288a;background:#eaf4ff;font-weight:900}.claim{margin-top:11px;padding:17px;border-radius:18px;color:#fff;background:linear-gradient(135deg,#24395d,#10233f)}.claim small{display:block;color:#9fdff2;font-weight:900}.claim strong{display:block;margin-top:7px;font-size:18px;line-height:1.55}.question-compose{margin-top:12px}.textarea-shell{display:grid;grid-template-columns:1fr auto;gap:8px}.textarea-shell textarea{width:100%;min-height:112px;padding:14px;resize:vertical;border:1px solid #cfdde9;border-radius:15px;outline:0;line-height:1.6}.textarea-shell textarea:focus{border-color:#017bc5;box-shadow:0 0 0 4px rgba(1,123,197,.1)}.mic{align-self:end;width:48px;height:48px;border:0;border-radius:14px;color:#00288a;background:#eaf4ff;font-size:20px}.mic.listening{color:#fff;background:#dc4c64}.evaluate{width:100%;min-height:48px;margin-top:9px;border:0;border-radius:14px;color:#fff;background:linear-gradient(135deg,#00288a,#017bc5);font-weight:950;box-shadow:0 9px 20px rgba(0,40,138,.18)}.result{margin-top:13px;padding:17px;border:1px solid #dce7f1;border-radius:19px;background:#fbfdff}.result[hidden]{display:none}.score-row{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}.score{display:grid;place-items:center;width:76px;height:76px;border-radius:50%;color:#00288a;background:conic-gradient(#00b1d8 var(--score),#e4edf5 0);position:relative}.score:after{content:"";position:absolute;inset:8px;border-radius:50%;background:#fff}.score strong{position:relative;z-index:1;font-size:22px}.result h3{margin:0 0 5px}.result p{margin:0;color:#68798c;line-height:1.55}.rubric{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:13px}.rubric-item{padding:10px;border-radius:13px;background:#f1f5f9}.rubric-item.pass{background:#e8f9f1}.rubric-item b,.rubric-item span{display:block}.rubric-item b{font-size:12px}.rubric-item span{margin-top:4px;color:#68798c;font-size:10px}.suggestion{margin-top:11px;padding:13px;border-left:4px solid #fda634;border-radius:12px;background:#fff8eb}.suggestion small{color:#9b650d;font-weight:900}.suggestion strong{display:block;margin-top:5px;line-height:1.55}.right-stack{display:grid;gap:14px}.lens-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.mini-lens{padding:11px;border-radius:14px;background:#f4f8fc}.mini-lens span{display:block;font-size:21px}.mini-lens b{display:block;margin-top:5px;font-size:12px}.mini-lens small{display:block;margin-top:3px;color:#7b8b9e;font-size:10px;line-height:1.4}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.stat{padding:12px;border-radius:14px;background:#f4f8fc}.stat small,.stat strong{display:block}.stat small{color:#7b8b9e}.stat strong{margin-top:5px;color:#00288a;font-size:21px}.badge-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}.badge{padding:8px 10px;border-radius:11px;color:#7b8b9e;background:#eef2f6;font-size:11px;font-weight:900}.badge.unlocked{color:#157451;background:#dff8ea}.bridge{padding:17px;border-radius:20px;color:#fff;background:linear-gradient(145deg,#157451,#1f9d68)}.bridge h3{margin:0}.bridge p{margin:7px 0 13px;color:rgba(255,255,255,.78);font-size:12px;line-height:1.55}.bridge a{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;color:#157451;background:#fff;font-weight:950;text-decoration:none}.toast{position:fixed;left:50%;bottom:22px;z-index:90;transform:translateX(-50%);padding:12px 17px;border-radius:14px;color:#fff;background:#157451;box-shadow:0 15px 35px rgba(21,116,81,.25);font-size:13px;font-weight:850}.toast[hidden]{display:none}@media(max-width:1180px){.layout{grid-template-columns:240px 1fr}.right-stack{grid-column:1/-1;grid-template-columns:repeat(3,1fr)}.sticky{position:static}}@media(max-width:820px){.topbar{padding:8px 11px}.back{display:none}.top-track{width:64px}.hero{grid-template-columns:1fr}.hero-icon{display:none}.layout{grid-template-columns:1fr}.right-stack{grid-template-columns:1fr}.lesson-nav{grid-template-columns:repeat(3,1fr)}.lesson-button{grid-template-columns:30px 1fr}.done-mark{display:none}.compare,.lesson-points{grid-template-columns:1fr}.rubric{grid-template-columns:1fr 1fr}}@media(max-width:540px){.page{padding:11px 8px 82px}.brand img{width:148px}.top-progress{padding:7px}.top-progress strong{font-size:11px}.hero{padding:22px 18px;border-radius:22px}.hero h1{font-size:29px}.hero-actions{display:grid}.panel,.main-card{border-radius:19px}.lesson-nav{grid-template-columns:1fr 1fr}.lesson-button{padding:8px}.tabs{padding:9px}.tab{font-size:12px}.tab-panel{padding:14px}.lesson-visual{grid-template-columns:1fr}.lesson-emoji{width:58px;height:58px;border-radius:18px;font-size:31px}.challenge-head{grid-template-columns:1fr}.textarea-shell{grid-template-columns:1fr auto}.rubric{grid-template-columns:1fr 1fr}.lesson-actions{display:grid;grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <a class="back" href="../app.html">← 대시보드</a>
+      <a href="../app.html"><img src="../assets/images/brand/saenggakjaguk-ai-logo.png" alt="생각자국 AI"></a>
+    </div>
+    <div class="top-progress" aria-label="전체 학습 진도">
+      <strong id="topProgressText">0% 완료</strong>
+      <div class="top-track"><div class="top-bar" id="topProgressBar"></div></div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">🔎 질문하는 힘을 배우는 곳</span>
+        <h1>소크라테스 질문학교</h1>
+        <p>정답을 빨리 찾는 대신, 생각을 깊게 여는 질문을 배웁니다. 여섯 가지 질문 렌즈를 익히고 평범한 질문을 탐구 질문으로 바꾼 뒤, 생각스튜디오에서 실제 대화에 사용해보세요.</p>
+        <div class="hero-actions">
+          <button id="startChallenge" type="button">오늘의 질문 훈련 시작</button>
+          <a href="./think-studio.html">생각스튜디오에서 실전 대화 →</a>
+        </div>
+      </div>
+      <div class="hero-icon" aria-hidden="true">🧠</div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel sticky">
+        <h2>나의 질문 수업</h2>
+        <p>한 렌즈씩 배우고 바로 질문으로 사용합니다.</p>
+        <div class="learner-box">
+          <div class="learner-icon">🧑‍🎓</div>
+          <div><strong id="learnerName">학생 학습자</strong><small id="learnerGrade">학년 확인 중</small></div>
+        </div>
+        <nav class="lesson-nav" id="lessonNav" aria-label="질문 렌즈 수업"></nav>
+      </aside>
+
+      <section class="main-card">
+        <div class="tabs" role="tablist">
+          <button class="tab active" type="button" data-tab="learn">1. 질문법 배우기</button>
+          <button class="tab" type="button" data-tab="practice">2. 질문 만들기</button>
+        </div>
+
+        <div class="tab-panel" id="learnPanel">
+          <div class="section-head">
+            <div><h2 id="lessonTitle">명료화 질문</h2><p id="lessonSubtitle">말의 뜻과 범위를 분명하게 만드는 질문입니다.</p></div>
+            <span class="lens-chip" id="lensChip">🔍 1번째 렌즈</span>
+          </div>
+          <div class="lesson-stage" id="lessonStage"></div>
+          <div class="lesson-actions">
+            <button class="secondary" id="prevLesson" type="button">← 이전 렌즈</button>
+            <button class="primary" id="completeLesson" type="button">이 렌즈 익힘 완료 ✓</button>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="practicePanel" hidden>
+          <div class="section-head">
+            <div><h2>질문을 직접 만들어보자</h2><p>주장을 읽고, 정답을 묻지 말고 생각을 열어주는 질문을 작성하세요.</p></div>
+            <span class="lens-chip" id="practiceLens">🎯 자유 훈련</span>
+          </div>
+          <div class="challenge-head">
+            <div class="field"><label for="topicSelect">훈련 주제</label><select id="topicSelect"></select></div>
+            <button class="new-topic" id="newTopic" type="button">주제 바꾸기 ↻</button>
+          </div>
+          <article class="claim"><small>생각을 열어볼 주장</small><strong id="claimText"></strong></article>
+          <div class="question-compose">
+            <div class="textarea-shell">
+              <textarea id="questionInput" placeholder="예: 그 생각을 뒷받침하는 근거는 무엇이며, 다른 설명은 가능하지 않을까?"></textarea>
+              <button class="mic" id="micButton" type="button" aria-label="음성으로 질문 입력">🎙️</button>
+            </div>
+            <button class="evaluate" id="evaluateButton" type="button">내 질문 분석하기</button>
+          </div>
+          <section class="result" id="result" hidden>
+            <div class="score-row">
+              <div class="score" id="scoreCircle" style="--score:0%"><strong id="scoreValue">0</strong></div>
+              <div><h3 id="resultTitle">질문 분석 결과</h3><p id="resultMessage"></p></div>
+            </div>
+            <div class="rubric" id="rubric"></div>
+            <div class="suggestion"><small>한 단계 더 깊은 질문</small><strong id="suggestionText"></strong></div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="right-stack">
+        <section class="panel">
+          <h2>질문의 6가지 렌즈</h2>
+          <p>좋은 질문은 생각의 각도를 바꿉니다.</p>
+          <div class="lens-grid" id="lensGrid"></div>
+        </section>
+        <section class="panel">
+          <h2>나의 질문자국</h2>
+          <p>완료한 수업과 직접 만든 질문이 쌓입니다.</p>
+          <div class="stats"><div class="stat"><small>완료 렌즈</small><strong id="completedCount">0/6</strong></div><div class="stat"><small>만든 질문</small><strong id="questionCount">0</strong></div></div>
+          <div class="badge-list" id="badgeList"></div>
+        </section>
+        <section class="bridge">
+          <h3>배웠다면, 대화로 써보자</h3>
+          <p>질문학교에서 만든 질문을 생각스튜디오의 실제 학습 대화에 연결합니다.</p>
+          <a href="./think-studio.html">생각스튜디오 열기 →</a>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" hidden>학습기록을 저장했습니다.</div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE_KEY = "ttai_socratic_question_school_v1";
+      const session = (() => {
+        const params = new URLSearchParams(location.search);
+        let saved = {};
+        try { saved = JSON.parse(localStorage.getItem("ttai_demo_session") || "{}"); } catch (_) {}
+        return { role: params.get("role") || saved.role || "student", grade: params.get("grade") || saved.grade || "m2" };
+      })();
+      const gradeLabels = {e1:"초등 1학년",e2:"초등 2학년",e3:"초등 3학년",e4:"초등 4학년",e5:"초등 5학년",e6:"초등 6학년",m1:"중학교 1학년",m2:"중학교 2학년",m3:"중학교 3학년",h1:"고등학교 1학년",h2:"고등학교 2학년",h3:"고등학교 3학년"};
+      const roleLabels = {student:"학생",teacher:"교사",parent:"학부모",school:"학교 관리자",district:"교육지원청",province:"시·도교육청",admin:"플랫폼 관리자"};
+      const $ = (id) => document.getElementById(id);
+
+      const lessons = [
+        {id:"clarify",icon:"🔍",name:"명료화",short:"뜻을 분명히",subtitle:"말의 뜻과 범위를 분명하게 만드는 질문입니다.",description:"상대가 사용한 말이 무엇을 뜻하는지, 어디까지 포함하는지 확인합니다.",weak:"그게 맞아?",strong:"여기서 ‘성공’이라는 말은 구체적으로 무엇을 뜻해?",points:[["핵심 단어 찾기","뜻이 여러 개인 단어를 고릅니다."],["범위 확인하기","언제, 어디서, 누구에게 해당하는지 묻습니다."],["예를 요청하기","추상적인 말을 실제 사례로 바꿉니다."]],prompt:"그 말에서 가장 먼저 뜻을 확인해야 할 단어는 무엇일까?"},
+        {id:"evidence",icon:"🧾",name:"근거",short:"왜 그런지",subtitle:"주장을 뒷받침하는 이유와 자료를 확인하는 질문입니다.",description:"느낌과 사실을 구분하고, 판단이 어떤 증거 위에 서 있는지 살펴봅니다.",weak:"진짜야?",strong:"그 결론을 뒷받침하는 자료나 경험은 무엇이며, 믿을 만한 이유는 무엇이야?",points:[["출처 묻기","누가, 언제, 어떻게 알았는지 확인합니다."],["사실과 의견 구분","관찰한 것과 해석한 것을 나눕니다."],["반대 근거 찾기","다른 자료가 있는지도 함께 봅니다."]],prompt:"이 주장에 반드시 확인해야 할 근거는 무엇일까?"},
+        {id:"assumption",icon:"🧱",name:"전제",short:"숨은 가정",subtitle:"당연하다고 여긴 숨은 가정을 발견하는 질문입니다.",description:"주장이 성립하려면 미리 참이라고 믿어야 하는 생각을 찾아냅니다.",weak:"왜 그렇게 생각해?",strong:"이 생각이 맞으려면 우리가 무엇을 당연하다고 가정해야 할까?",points:[["당연함 멈추기","‘원래’, ‘반드시’를 잠시 의심합니다."],["조건 바꾸기","상황이 달라도 같은 결론인지 봅니다."],["빠진 사람 찾기","누구의 경험이 제외됐는지 살핍니다."]],prompt:"이 생각 아래 숨어 있는 가정은 무엇일까?"},
+        {id:"perspective",icon:"👀",name:"관점",short:"다른 눈으로",subtitle:"다른 사람과 반대 입장에서 다시 보는 질문입니다.",description:"한쪽 시선에 갇히지 않고 이해관계자와 반대 관점에서 문제를 바라봅니다.",weak:"다른 생각은 없어?",strong:"이 문제를 학생, 교사, 학부모가 각각 본다면 무엇이 다르게 보일까?",points:[["사람 바꾸기","다른 역할의 입장에서 봅니다."],["반대 주장 세우기","내 생각과 반대되는 최선의 논리를 만듭니다."],["문화·시간 바꾸기","다른 시대와 환경에서도 생각해봅니다."]],prompt:"이 문제를 가장 다르게 볼 사람은 누구일까?"},
+        {id:"consequence",icon:"🌊",name:"결과",short:"그다음은?",subtitle:"선택이 가져올 영향과 연쇄 결과를 살펴보는 질문입니다.",description:"바로 보이는 결과뿐 아니라 장기 영향, 부작용, 예상 밖의 변화를 탐구합니다.",weak:"그러면 어떻게 돼?",strong:"이 선택을 모두가 1년 동안 계속한다면 어떤 좋은 변화와 예상 못 한 문제가 생길까?",points:[["시간 늘리기","오늘, 1년 뒤, 10년 뒤를 비교합니다."],["대상 넓히기","개인과 사회에 미칠 영향을 나눕니다."],["부작용 찾기","좋은 의도의 예상 밖 결과를 살핍니다."]],prompt:"이 선택 뒤에 이어질 두 번째 결과는 무엇일까?"},
+        {id:"meta",icon:"🪞",name:"질문 점검",short:"질문을 질문",subtitle:"우리가 묻는 방식 자체를 돌아보는 질문입니다.",description:"지금 던진 질문이 문제를 제대로 비추는지, 더 중요한 질문을 놓치지 않았는지 살핍니다.",weak:"또 물어볼 건 없어?",strong:"우리는 왜 이 질문부터 하고 있으며, 더 먼저 물어야 할 질문은 없을까?",points:[["질문 목적 보기","무엇을 알아내려는 질문인지 확인합니다."],["편향 점검하기","답을 정해놓은 질문인지 살핍니다."],["더 큰 질문 찾기","문제의 틀 자체를 다시 만듭니다."]],prompt:"지금 질문보다 먼저 물어야 할 것은 무엇일까?"}
+      ];
+
+      const topics = {
+        school:["학교에서는 스마트폰을 전면 금지해야 한다.","시험 점수가 높으면 그 과목을 잘 안다고 볼 수 있다.","숙제는 많을수록 학습에 도움이 된다."],
+        science:["인공지능은 사람보다 더 공정한 판단을 할 수 있다.","기술이 발전하면 환경 문제는 자연스럽게 해결될 것이다.","과학적으로 설명되지 않으면 믿을 가치가 없다."],
+        society:["지역의 모든 문제는 예산이 부족해서 생긴다.","다수의 의견은 소수의 의견보다 옳을 가능성이 높다.","안전을 위해서는 개인의 자유를 일부 제한해도 된다."],
+        relationship:["친한 친구라면 내 생각을 말하지 않아도 알아야 한다.","갈등을 피하는 것이 관계를 지키는 가장 좋은 방법이다.","사과를 먼저 하는 사람이 잘못한 사람이다."],
+        career:["좋아하는 일을 직업으로 선택해야 행복하다.","미래에 사라질 가능성이 있는 직업은 준비할 필요가 없다.","좋은 대학에 가는 것이 성공적인 진로의 출발점이다."],
+        media:["조회 수가 높은 정보는 많은 사람이 검증한 정보다.","짧은 영상으로도 복잡한 사회문제를 충분히 이해할 수 있다.","AI가 만든 글은 사람이 쓴 글보다 믿기 어렵다."]
+      };
+      const topicLabels = {school:"학교와 학습",science:"과학과 AI",society:"사회와 지역",relationship:"친구와 관계",career:"진로와 미래",media:"미디어와 정보"};
+
+      let state = {completed:[],questions:[],lessonIndex:0,topic:"school",claimIndex:0};
+      try { state = {...state,...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")}; } catch (_) {}
+      state.completed = Array.isArray(state.completed) ? state.completed : [];
+      state.questions = Array.isArray(state.questions) ? state.questions : [];
+      state.lessonIndex = Math.max(0,Math.min(lessons.length-1,Number(state.lessonIndex)||0));
+
+      function save(showToast=true){
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+        if(showToast){$("toast").hidden=false;clearTimeout(save.timer);save.timer=setTimeout(()=>$("toast").hidden=true,1700)}
+        updateProgress();
+      }
+
+      function updateProgress(){
+        const completed=state.completed.length;
+        const percent=Math.round((completed/lessons.length)*100);
+        $("topProgressText").textContent=percent+"% 완료";
+        $("topProgressBar").style.width=percent+"%";
+        $("completedCount").textContent=completed+"/6";
+        $("questionCount").textContent=String(state.questions.length);
+        const badgeData=[{name:"첫 질문",on:state.questions.length>=1},{name:"세 렌즈",on:completed>=3},{name:"여섯 렌즈",on:completed>=6},{name:"깊은 질문자",on:state.questions.some(q=>q.score>=80)}];
+        $("badgeList").innerHTML=badgeData.map(b=>'<span class="badge '+(b.on?'unlocked':'')+'">'+(b.on?'✓ ':'🔒 ')+b.name+'</span>').join("");
+      }
+
+      function renderLearner(){
+        $("learnerName").textContent=(roleLabels[session.role]||"학생")+" 학습자";
+        $("learnerGrade").textContent=gradeLabels[session.grade]||"공통 과정";
+      }
+
+      function renderNav(){
+        $("lessonNav").innerHTML=lessons.map((lesson,index)=>{
+          const done=state.completed.includes(lesson.id);
+          return '<button class="lesson-button '+(index===state.lessonIndex?'active ':'')+(done?'done':'')+'" type="button" data-index="'+index+'"><span class="lesson-no">'+lesson.icon+'</span><span class="lesson-copy"><strong>'+lesson.name+' 질문</strong><small>'+lesson.short+'</small></span><span class="done-mark">'+(done?'✓':'')+'</span></button>';
+        }).join("");
+        document.querySelectorAll(".lesson-button").forEach(btn=>btn.addEventListener("click",()=>{state.lessonIndex=Number(btn.dataset.index);save(false);renderLesson();renderNav()}));
+      }
+
+      function renderLesson(){
+        const lesson=lessons[state.lessonIndex];
+        $("lessonTitle").textContent=lesson.name+" 질문";
+        $("lessonSubtitle").textContent=lesson.subtitle;
+        $("lensChip").textContent=lesson.icon+" "+(state.lessonIndex+1)+"번째 렌즈";
+        $("lessonStage").innerHTML='<div class="lesson-visual"><div class="lesson-emoji">'+lesson.icon+'</div><div><h3>'+lesson.prompt+'</h3><p>'+lesson.description+'</p></div></div><div class="compare"><article class="question-card weak"><small>닫힌 질문</small><p>'+lesson.weak+'</p></article><article class="question-card strong"><small>생각을 여는 질문</small><p>'+lesson.strong+'</p></article></div><div class="lesson-points">'+lesson.points.map(p=>'<div class="point"><b>'+p[0]+'</b><span>'+p[1]+'</span></div>').join("")+'</div>';
+        $("prevLesson").disabled=state.lessonIndex===0;
+        $("completeLesson").textContent=state.completed.includes(lesson.id)?"완료한 렌즈 ✓":"이 렌즈 익힘 완료 ✓";
+      }
+
+      function renderLensSummary(){
+        $("lensGrid").innerHTML=lessons.map(l=>'<div class="mini-lens"><span>'+l.icon+'</span><b>'+l.name+'</b><small>'+l.short+'</small></div>').join("");
+      }
+
+      function renderTopicOptions(){
+        $("topicSelect").innerHTML=Object.keys(topics).map(key=>'<option value="'+key+'" '+(key===state.topic?'selected':'')+'>'+topicLabels[key]+'</option>').join("");
+        renderClaim();
+      }
+
+      function renderClaim(){
+        const list=topics[state.topic]||topics.school;
+        state.claimIndex=((Number(state.claimIndex)||0)%list.length+list.length)%list.length;
+        $("claimText").textContent=list[state.claimIndex];
+        $("questionInput").value="";
+        $("result").hidden=true;
+        save(false);
+      }
+
+      function analyzeQuestion(text){
+        const compact=text.trim();
+        const open=/(왜|어떻게|무엇|어떤|어느|만약|누구|언제|어디)/.test(compact);
+        const reason=/(근거|이유|증거|자료|사례|경험|확인|출처)/.test(compact);
+        const depth=/(가정|전제|관점|입장|반대|다른|영향|결과|장기|놓친|먼저|질문)/.test(compact);
+        const neutral=!/(맞지|아니야|당연히|무조건|반드시 .*해야|그렇지)/.test(compact);
+        const length=Math.min(18,Math.max(0,compact.length-12));
+        let score=18+(open?20:0)+(reason?19:0)+(depth?19:0)+(neutral?14:0)+length;
+        score=Math.max(0,Math.min(100,score));
+        const active=lessons[state.lessonIndex];
+        const suggestions=[
+          "여기서 뜻이 모호한 핵심 단어는 무엇이며, 사람마다 다르게 이해할 가능성은 없을까?",
+          "그 결론을 뒷받침하는 가장 믿을 만한 근거는 무엇이고, 반대되는 자료는 없을까?",
+          "이 생각이 맞으려면 어떤 가정을 먼저 참이라고 믿어야 할까?",
+          "이 문제를 가장 다르게 경험하는 사람은 누구이며, 그 사람은 무엇을 중요하게 볼까?",
+          "이 선택이 계속될 때 단기적인 이익 뒤에 어떤 장기 영향이 생길까?",
+          "우리는 왜 이 질문부터 하고 있으며, 더 먼저 물어야 할 질문은 없을까?"
+        ];
+        return {score,checks:[{name:"열린 질문",pass:open,note:"왜·어떻게·무엇"},{name:"근거 탐색",pass:reason,note:"이유·자료·사례"},{name:"사고의 깊이",pass:depth,note:"전제·관점·결과"},{name:"중립적 표현",pass:neutral,note:"답을 강요하지 않음"}],suggestion:suggestions[state.lessonIndex],lesson:active.id};
+      }
+
+      function showResult(){
+        const text=$("questionInput").value.trim();
+        if(text.length<5){$("questionInput").focus();$("result").hidden=false;$("scoreValue").textContent="0";$("scoreCircle").style.setProperty("--score","0%");$("resultTitle").textContent="질문을 조금 더 써주세요";$("resultMessage").textContent="한 단어보다 완전한 문장으로 질문하면 질문의 구조를 분석할 수 있습니다.";$("rubric").innerHTML="";$("suggestionText").textContent=lessons[state.lessonIndex].strong;return}
+        const analysis=analyzeQuestion(text);
+        $("result").hidden=false;
+        $("scoreValue").textContent=String(analysis.score);
+        $("scoreCircle").style.setProperty("--score",analysis.score+"%");
+        $("resultTitle").textContent=analysis.score>=80?"생각을 깊게 여는 질문입니다":analysis.score>=60?"좋은 출발입니다":"한 가지 렌즈를 더 얹어보세요";
+        $("resultMessage").textContent=analysis.score>=80?"근거와 다른 가능성을 함께 탐색하도록 잘 열려 있습니다.":"질문에 근거, 전제, 다른 관점 또는 장기 결과 중 하나를 더해보세요.";
+        $("rubric").innerHTML=analysis.checks.map(c=>'<div class="rubric-item '+(c.pass?'pass':'')+'"><b>'+(c.pass?'✓ ':'○ ')+c.name+'</b><span>'+c.note+'</span></div>').join("");
+        $("suggestionText").textContent=analysis.suggestion;
+        state.questions.unshift({text,score:analysis.score,claim:$("claimText").textContent,lens:analysis.lesson,createdAt:new Date().toISOString()});
+        state.questions=state.questions.slice(0,50);
+        save();
+      }
+
+      function switchTab(name){
+        document.querySelectorAll(".tab").forEach(tab=>tab.classList.toggle("active",tab.dataset.tab===name));
+        $("learnPanel").hidden=name!=="learn";
+        $("practicePanel").hidden=name!=="practice";
+        if(name==="practice"){$("practiceLens").textContent=lessons[state.lessonIndex].icon+" "+lessons[state.lessonIndex].name+" 렌즈 훈련";setTimeout(()=>$("questionInput").focus(),80)}
+      }
+
+      function initVoice(){
+        const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+        if(!SpeechRecognition){$("micButton").disabled=true;$("micButton").title="이 브라우저는 음성입력을 지원하지 않습니다.";return}
+        const recognition=new SpeechRecognition();recognition.lang="ko-KR";recognition.interimResults=false;
+        recognition.onstart=()=>$("micButton").classList.add("listening");
+        recognition.onend=()=>$("micButton").classList.remove("listening");
+        recognition.onresult=(event)=>{$("questionInput").value=(event.results[0][0].transcript||"").trim()};
+        $("micButton").addEventListener("click",()=>recognition.start());
+      }
+
+      document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>switchTab(tab.dataset.tab)));
+      $("completeLesson").addEventListener("click",()=>{const id=lessons[state.lessonIndex].id;if(!state.completed.includes(id))state.completed.push(id);save();renderNav();renderLesson();if(state.lessonIndex<lessons.length-1){setTimeout(()=>{state.lessonIndex+=1;save(false);renderNav();renderLesson()},450)}});
+      $("prevLesson").addEventListener("click",()=>{if(state.lessonIndex>0){state.lessonIndex-=1;save(false);renderNav();renderLesson()}});
+      $("topicSelect").addEventListener("change",(event)=>{state.topic=event.target.value;state.claimIndex=0;renderClaim()});
+      $("newTopic").addEventListener("click",()=>{state.claimIndex+=1;renderClaim()});
+      $("evaluateButton").addEventListener("click",showResult);
+      $("questionInput").addEventListener("keydown",(event)=>{if((event.ctrlKey||event.metaKey)&&event.key==="Enter")showResult()});
+      $("startChallenge").addEventListener("click",()=>{switchTab("practice");document.querySelector(".main-card").scrollIntoView({behavior:"smooth",block:"start"})});
+
+      renderLearner();renderNav();renderLesson();renderLensSummary();renderTopicOptions();updateProgress();initVoice();
+    })();
+  </script>
+</body>
+</html>
