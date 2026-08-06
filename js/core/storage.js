@@ -8,7 +8,6 @@
     localQuest: "ttai_local_quest"
   };
 
-  // 이 값이 바뀌면 기존 브라우저의 로컬퀘스트 시연 흔적만 1회 초기화됩니다.
   const LOCAL_QUEST_RESET_VERSION = "20260803-pristine-1";
   let lastKnownLocalQuestRaw = localStorage.getItem(KEYS.localQuest);
 
@@ -44,51 +43,9 @@
   function sampleRecords(grade) {
     const label = gradeLabels[grade] || gradeLabels.m2;
     return [
-      {
-        id: "sample-equation",
-        date: daysAgo(0),
-        grade,
-        subject: "수학",
-        topic: "등식의 성질과 일차방정식",
-        title: "규칙 암기에서 원리 이해로 한 걸음 성장했어요",
-        summary: "이항할 때 부호가 저절로 바뀌는 것이 아니라 등식의 양쪽에 같은 연산을 해야 균형이 유지된다는 원리를 자신의 말로 설명했습니다.",
-        strengths: ["개념이해", "자기설명", "오답분석"],
-        nextGoal: "양쪽에 미지수가 있는 방정식에서도 등식의 균형 원리를 적용해봅니다.",
-        responseCount: 5,
-        studentName: "김생각",
-        gradeLabel: label,
-        sample: true
-      },
-      {
-        id: "sample-reading",
-        date: daysAgo(5),
-        grade,
-        subject: "국어",
-        topic: "주장과 근거 구분",
-        title: "글의 핵심 근거를 찾아 설명했어요",
-        summary: "글쓴이의 주장과 이를 뒷받침하는 근거를 구분하고, 근거가 충분한지 스스로 질문했습니다.",
-        strengths: ["비판적 사고", "근거판단", "질문력"],
-        nextGoal: "같은 주제에 대한 반대 의견의 근거도 비교해봅니다.",
-        responseCount: 4,
-        studentName: "김생각",
-        gradeLabel: label,
-        sample: true
-      },
-      {
-        id: "sample-science",
-        date: daysAgo(12),
-        grade,
-        subject: "과학",
-        topic: "상태 변화",
-        title: "관찰한 현상을 원인과 연결했어요",
-        summary: "물이 끓을 때 생기는 기포를 단순한 공기라고 보지 않고, 관찰과 자료를 통해 수증기와 연결했습니다.",
-        strengths: ["관찰력", "탐구력", "자기교정"],
-        nextGoal: "증발과 끓음의 공통점과 차이점을 표로 정리해봅니다.",
-        responseCount: 6,
-        studentName: "김생각",
-        gradeLabel: label,
-        sample: true
-      }
+      { id:"sample-equation", date:daysAgo(0), grade, subject:"수학", topic:"등식의 성질과 일차방정식", title:"규칙 암기에서 원리 이해로 한 걸음 성장했어요", summary:"이항할 때 부호가 저절로 바뀌는 것이 아니라 등식의 양쪽에 같은 연산을 해야 균형이 유지된다는 원리를 자신의 말로 설명했습니다.", strengths:["개념이해","자기설명","오답분석"], nextGoal:"양쪽에 미지수가 있는 방정식에서도 등식의 균형 원리를 적용해봅니다.", responseCount:5, studentName:"김생각", gradeLabel:label, sample:true },
+      { id:"sample-reading", date:daysAgo(5), grade, subject:"국어", topic:"주장과 근거 구분", title:"글의 핵심 근거를 찾아 설명했어요", summary:"글쓴이의 주장과 이를 뒷받침하는 근거를 구분하고, 근거가 충분한지 스스로 질문했습니다.", strengths:["비판적 사고","근거판단","질문력"], nextGoal:"같은 주제에 대한 반대 의견의 근거도 비교해봅니다.", responseCount:4, studentName:"김생각", gradeLabel:label, sample:true },
+      { id:"sample-science", date:daysAgo(12), grade, subject:"과학", topic:"상태 변화", title:"관찰한 현상을 원인과 연결했어요", summary:"물이 끓을 때 생기는 기포를 단순한 공기라고 보지 않고, 관찰과 자료를 통해 수증기와 연결했습니다.", strengths:["관찰력","탐구력","자기교정"], nextGoal:"증발과 끓음의 공통점과 차이점을 표로 정리해봅니다.", responseCount:6, studentName:"김생각", gradeLabel:label, sample:true }
     ];
   }
 
@@ -102,76 +59,38 @@
       teacherConfirmed: false,
       leaderId: null,
       team: [
-        { id: "student-1", name: "김생각", role: "팀원", avatar: "🧑‍🎓" },
-        { id: "student-2", name: "박탐구", role: "현장조사", avatar: "👩‍🎓" },
-        { id: "student-3", name: "이협력", role: "인터뷰", avatar: "🧑‍🎓" },
-        { id: "student-4", name: "최실천", role: "자료정리", avatar: "👩‍🎓" }
+        { id:"student-1", name:"김생각", role:"팀원", avatar:"🧑‍🎓" },
+        { id:"student-2", name:"박탐구", role:"현장조사", avatar:"👩‍🎓" },
+        { id:"student-3", name:"이협력", role:"인터뷰", avatar:"🧑‍🎓" },
+        { id:"student-4", name:"최실천", role:"자료정리", avatar:"👩‍🎓" }
       ],
       stage: 0,
-      stageLabels: [
-        "문제 바라보기", "문제 원인 찾기", "조사 설계", "대안 만들기", "시뮬레이션",
-        "팀 합의", "기관 연결", "담당자 참여 토의", "시정 반영결과"
-      ],
-      answers: {},
-      pendingReview: null,
-      proposal: "",
-      simulation: "",
-      peerThoughts: null,
-      sourcesUsed: [],
-      demoActiveVoterId: "student-1",
+      stageLabels: ["문제 바라보기","문제 원인 찾기","조사 설계","대안 만들기","시뮬레이션","팀 합의","기관 연결","담당자 참여 토의","시정 반영결과"],
+      answers: {}, pendingReview: null, proposal: "", simulation: "", peerThoughts: null, sourcesUsed: [], demoActiveVoterId: "student-1",
       votes: {
-        "student-1": { agree: null, comment: "" },
-        "student-2": { agree: null, comment: "" },
-        "student-3": { agree: null, comment: "" },
-        "student-4": { agree: null, comment: "" }
+        "student-1": { agree:null, comment:"" }, "student-2": { agree:null, comment:"" },
+        "student-3": { agree:null, comment:"" }, "student-4": { agree:null, comment:"" }
       },
-      institution: {
-        name: "창원시청",
-        department: "교통건설국 교통정책과",
-        officer: "박시정 주무관",
-        phone: "055-225-0000",
-        email: "traffic-demo@changwon.go.kr",
-        disclosed: false
-      },
+      institution: { name:"창원시청", department:"교통건설국 교통정책과", officer:"박시정 주무관", phone:"055-225-0000", email:"traffic-demo@changwon.go.kr", disclosed:false },
       officialDiscussion: {
-        started: false,
-        finished: false,
-        officerJoined: false,
-        notes: "",
-        aiQuestions: [
-          "학생 대안이 실제 행정절차에서 실행되려면 어떤 자료가 더 필요할까요?",
-          "담당기관의 예산·법령·현장 제약을 반영하면 대안을 어떻게 수정해야 할까요?",
-          "학생팀과 담당자가 각각 다음에 해야 할 행동은 무엇인가요?"
-        ]
+        started:false, finished:false, officerJoined:false, notes:"",
+        aiQuestions:["학생 대안이 실제 행정절차에서 실행되려면 어떤 자료가 더 필요할까요?","담당기관의 예산·법령·현장 제약을 반영하면 대안을 어떻게 수정해야 할까요?","학생팀과 담당자가 각각 다음에 해야 할 행동은 무엇인가요?"]
       },
-      municipalResult: {
-        status: "검토 전",
-        text: "",
-        officerName: "",
-        updatedAt: null
-      },
-      meeting: {
-        lastOpenedAt: null,
-        notes: []
-      },
+      municipalResult: { status:"검토 전", text:"", officerName:"", updatedAt:null },
+      meeting: { lastOpenedAt:null, notes:[] },
       updatedAt: new Date().toISOString()
     };
   }
 
   function getSession() {
-    return read(KEYS.session, { role: "student", grade: "m2" });
+    return read(KEYS.session, { role:"student", grade:"m2" });
   }
 
   function getGrowthRecords() {
     const session = getSession();
     const records = read(KEYS.growth, []);
     if (!Array.isArray(records) || records.length === 0) return sampleRecords(session.grade || "m2");
-    return records.map((record) => ({
-      studentName: "김생각",
-      gradeLabel: gradeLabels[record.grade] || gradeLabels[session.grade] || gradeLabels.m2,
-      ...record,
-      sample: false
-    }));
+    return records.map((record) => ({ studentName:"김생각", gradeLabel:gradeLabels[record.grade] || gradeLabels[session.grade] || gradeLabels.m2, ...record, sample:false }));
   }
 
   function getFeedbacks() {
@@ -181,13 +100,7 @@
 
   function saveFeedback(recordId, text, teacherName = "김생각 선생님") {
     const feedbacks = getFeedbacks();
-    feedbacks[recordId] = {
-      recordId,
-      text: String(text || "").trim(),
-      teacherName,
-      status: "confirmed",
-      confirmedAt: new Date().toISOString()
-    };
+    feedbacks[recordId] = { recordId, text:String(text || "").trim(), teacherName, status:"confirmed", confirmedAt:new Date().toISOString() };
     write(KEYS.feedback, feedbacks);
     return feedbacks[recordId];
   }
@@ -201,11 +114,7 @@
   }
 
   function saveLocalQuest(quest) {
-    return write(KEYS.localQuest, {
-      ...quest,
-      resetVersion: LOCAL_QUEST_RESET_VERSION,
-      updatedAt: new Date().toISOString()
-    });
+    return write(KEYS.localQuest, { ...quest, resetVersion:LOCAL_QUEST_RESET_VERSION, updatedAt:new Date().toISOString() });
   }
 
   function updateLocalQuest(patch) {
@@ -227,28 +136,13 @@
   function formatDate(value, withTime = false) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return "날짜 정보 없음";
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      ...(withTime ? { hour: "2-digit", minute: "2-digit" } : {})
-    }).format(date);
+    return new Intl.DateTimeFormat("ko-KR", { year:"numeric", month:"long", day:"numeric", ...(withTime ? { hour:"2-digit", minute:"2-digit" } : {}) }).format(date);
   }
 
   function competenceSummary(records) {
     const counts = {};
-    records.forEach((record) => {
-      (record.strengths || []).forEach((strength) => {
-        counts[strength] = (counts[strength] || 0) + 1;
-      });
-    });
-    return Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, count], index) => ({
-        name,
-        count,
-        signal: Math.min(94, 48 + count * 12 + Math.max(0, 8 - index * 3))
-      }));
+    records.forEach((record) => (record.strengths || []).forEach((strength) => { counts[strength] = (counts[strength] || 0) + 1; }));
+    return Object.entries(counts).sort((a,b) => b[1]-a[1]).map(([name,count],index) => ({ name, count, signal:Math.min(94,48+count*12+Math.max(0,8-index*3)) }));
   }
 
   function teacherDraft(record) {
@@ -257,11 +151,7 @@
 
   function parentQuestions(record) {
     const topic = record.topic || "오늘 배운 내용";
-    return [
-      `오늘 ${topic}에서 처음에는 무엇이 가장 어려웠어?`,
-      "도움을 받은 뒤 네 생각이 어떻게 달라졌어?",
-      `다음 목표인 ‘${record.nextGoal || "새로운 문제에 적용하기"}’를 위해 집에서 무엇을 해볼까?`
-    ];
+    return [`오늘 ${topic}에서 처음에는 무엇이 가장 어려웠어?`,"도움을 받은 뒤 네 생각이 어떻게 달라졌어?",`다음 목표인 ‘${record.nextGoal || "새로운 문제에 적용하기"}’를 위해 집에서 무엇을 해볼까?`];
   }
 
   function isLocalQuestPage() {
@@ -277,33 +167,42 @@
     }
   }
 
+  function compactLegacyBrand() {
+    const image = document.querySelector('img[alt="생각자국 AI"]');
+    if (!image) return;
+    const header = image.closest("header");
+    if (header) header.classList.add("ttai-compact-header");
+    const home = window.location.pathname.includes("/services/") ? "../login.html" : "./login.html";
+    const anchor = document.createElement("a");
+    anchor.href = home;
+    anchor.className = "ttai-global-wordmark";
+    anchor.setAttribute("aria-label", "생각자국 AI 홈");
+    anchor.innerHTML = '<span>생각자국</span><span class="ttai-ai">AI</span>';
+    image.replaceWith(anchor);
+
+    if (!document.getElementById("ttai-global-brand-style")) {
+      const style = document.createElement("style");
+      style.id = "ttai-global-brand-style";
+      style.textContent = '.ttai-compact-header{min-height:62px!important;padding-top:8px!important;padding-bottom:8px!important}.ttai-global-wordmark{display:inline-flex!important;align-items:center;gap:6px;color:#00288a!important;text-decoration:none!important;font-size:24px!important;font-weight:950!important;letter-spacing:-.05em!important;line-height:1!important;width:auto!important;height:auto!important}.ttai-global-wordmark .ttai-ai{color:#00b1d8}.ttai-global-wordmark:before{content:"S";display:grid;place-items:center;width:29px;height:29px;border-radius:10px;color:#fff;background:linear-gradient(145deg,#00b1d8,#017bc5);font-size:16px;font-weight:950;transform:rotate(-8deg)}@media(max-width:620px){.ttai-global-wordmark{font-size:21px!important}.ttai-global-wordmark:before{width:27px;height:27px}}';
+      document.head.appendChild(style);
+    }
+  }
+
   window.addEventListener("storage", (event) => {
     if (event.key !== KEYS.localQuest || !isLocalQuestPage()) return;
     lastKnownLocalQuestRaw = event.newValue;
     window.location.reload();
   });
-
   window.addEventListener("focus", reloadLocalQuestPageWhenChanged);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") reloadLocalQuestPageWhenChanged();
   });
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", compactLegacyBrand);
+  else compactLegacyBrand();
 
   window.TTAIStorage = {
-    KEYS,
-    gradeLabels,
-    gradeOrder,
-    getSession,
-    getGrowthRecords,
-    getFeedbacks,
-    saveFeedback,
-    getLocalQuest,
-    saveLocalQuest,
-    updateLocalQuest,
-    resetLocalQuest,
-    isLocalQuestEligible,
-    formatDate,
-    competenceSummary,
-    teacherDraft,
-    parentQuestions
+    KEYS, gradeLabels, gradeOrder, getSession, getGrowthRecords, getFeedbacks, saveFeedback,
+    getLocalQuest, saveLocalQuest, updateLocalQuest, resetLocalQuest, isLocalQuestEligible,
+    formatDate, competenceSummary, teacherDraft, parentQuestions
   };
 })();
