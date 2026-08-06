@@ -116,7 +116,7 @@
         avatar: "⚙️", name: "생각자국 운영자", title: "전체 기관과 AI 정책을 안전하게 운영합니다.",
         desc: "회원기관, 접근권한, 서비스 상태와 AI 정책을 관리합니다.", tags: ["멀티테넌트", "감사로그", "AI 정책"],
         statusTitle: "플랫폼 운영현황", statusDesc: "기관과 서비스 상태입니다.",
-        metrics: [metric("회원기관","6곳","교육지원청 기준"),metric("등록 사용자","104,962명","전체 사용자"),metric("활성 서비스","6개","시연 서비스"),metric("시스템 상태","정상","중대장애 없음")],
+        metrics: [metric("회원기관","6곳","교육지원청 기준"),metric("등록 사용자","104,962명","전체 사용자"),metric("활성 서비스","7개","시연 서비스"),metric("시스템 상태","정상","중대장애 없음")],
         cta: ["🗺️ 전체 흐름 점검 →", "./services/local-quest.html?role=admin"]
       }
     };
@@ -139,6 +139,7 @@
     cta.href = config.cta[1];
 
     const catalog = {
+      socratic: { icon:"🔎", title:"소크라테스 질문학교", desc:"여섯 가지 질문 렌즈를 배우고 직접 질문을 훈련합니다.", href:"./services/socratic-question-school.html?role="+encodeURIComponent(session.role)+"&grade="+encodeURIComponent(session.grade) },
       think: { icon:"💡", title:"생각스튜디오", desc:"질문과 오답을 단계별로 탐구합니다.", href:"./services/think-studio.html" },
       growth: { icon:"🧭", title:"성장나침반", desc:"학습과 생각의 변화를 확인합니다.", href:"./services/growth-compass.html" },
       quest: { icon:"🗺️", title:"로컬퀘스트", desc:"지역문제를 팀으로 조사하고 해결합니다.", href:"./services/local-quest.html?role="+encodeURIComponent(session.role)+"&grade="+encodeURIComponent(session.grade) },
@@ -148,13 +149,13 @@
     };
 
     const visibleByRole = {
-      student: window.TTAIStorage.isLocalQuestEligible(session.grade) ? ["think","growth","quest","career"] : ["think","growth","career"],
-      teacher: ["think","growth","quest","career","teacher","parent"],
-      parent: ["growth","parent"],
-      school: ["growth","quest","teacher","parent"],
+      student: window.TTAIStorage.isLocalQuestEligible(session.grade) ? ["socratic","think","growth","quest","career"] : ["socratic","think","growth","career"],
+      teacher: ["socratic","think","growth","quest","career","teacher","parent"],
+      parent: ["socratic","growth","parent"],
+      school: ["socratic","growth","quest","teacher","parent"],
       district: ["growth","quest"],
       province: ["growth","quest"],
-      admin: ["think","growth","quest","career","teacher","parent"]
+      admin: ["socratic","think","growth","quest","career","teacher","parent"]
     };
 
     const visibleKeys = visibleByRole[session.role] || visibleByRole.student;
