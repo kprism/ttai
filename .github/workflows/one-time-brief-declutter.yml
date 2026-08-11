@@ -1,0 +1,120 @@
+name: One-time briefing declutter
+on:
+  push:
+    paths:
+      - '.github/workflows/one-time-brief-declutter.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reduce main briefing text density
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('brief/teacher.html')
+          s = p.read_text(encoding='utf-8')
+          marker = 'BRIEF_DECLUTTER_20260811'
+          if marker in s:
+              raise SystemExit('already patched')
+
+          css = r'''
+/* BRIEF_DECLUTTER_20260811 */
+.briefClamp{display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.briefClampOne{display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.section .card p,.section .panel p,.section .whyCard p{font-size:14px;line-height:1.5;margin-top:6px;margin-bottom:8px}
+.section .explain{font-size:12.5px;line-height:1.5;padding:9px 11px}
+.section .step span,.section .flowbox span,.section .node small{font-size:12.5px;line-height:1.4}
+.section .lead{max-width:1000px;font-size:15px;line-height:1.55;margin-bottom:13px}
+.section .source{font-size:12px;line-height:1.55}
+.questCompact{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.questBox{padding:20px;border:1px solid var(--l);border-radius:20px;background:#f9fcff}
+.questBox h3{margin:0 0 12px;font-size:20px;color:var(--n)}
+.questFlow{display:grid;grid-template-columns:repeat(5,auto);align-items:center;justify-content:center;gap:8px;padding:22px 10px;border-radius:17px;background:linear-gradient(145deg,#f1f8ff,#edf5ff)}
+.questStep{min-width:92px;padding:13px 10px;border:1px solid #d7e5f2;border-radius:14px;background:#fff;text-align:center;font-weight:950;color:var(--n)}
+.questArrow{font-size:20px;font-weight:950;color:var(--b)}
+.questLayer{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.questMini{padding:16px 10px;border-radius:16px;background:#fff;border:1px solid var(--l);text-align:center}
+.questMini b{display:block;margin:4px 0;color:var(--n);font-size:16px}.questMini span{display:block;color:var(--m);font-size:12px;line-height:1.45}
+.questIcon{font-size:30px}.questBottom{margin-top:14px;text-align:center}.questBottom .demo{margin-top:0}
+@media(max-width:900px){.questCompact{grid-template-columns:1fr}.questLayer{grid-template-columns:1fr 1fr 1fr}.questFlow{grid-template-columns:1fr;gap:5px}.questArrow{transform:rotate(90deg)}}
+'''
+          s = s.replace('</style>', css + '</style>', 1)
+
+          js = r'''
+<script>
+(()=>{
+  const leads={
+    s1:'공공·행정·개발·마케팅 현장을 지나며, 문제를 실제 서비스로 해결해왔습니다.',
+    s2:'AI 시대의 교육은 답을 받는 법보다, 스스로 생각하고 검증하는 힘을 길러야 합니다.',
+    s3:'생각자국 AI는 학생의 답에 다시 묻고, 사고의 변화를 학습기록으로 남기는 AI Tutor입니다.',
+    s5:'AI 교육은 이미 시작됐습니다. 이제 차이는 AI가 있느냐가 아니라 어떤 학습을 만드는가입니다.',
+    s5core:'6개 핵심 서비스를 실제 화면으로 확인합니다.',
+    s10:'같은 AI라도 과목과 학생의 사고지점에 따라 질문과 학습행동이 달라집니다.',
+    s12:'스터디그룹은 대화를 자막·근거·질문으로 남겨 협업학습의 과정까지 기록합니다.',
+    s16:'학부모에게는 점수만이 아니라 아이가 어떻게 생각하고 성장했는지를 보여줍니다.',
+    s18:'기관은 개인 학습을 넘어 학교·지역 단위의 성장 흐름을 볼 수 있습니다.',
+    s19:'선생님의 현장 경험으로 함께 검증하고 보완하겠습니다.'
+  };
+  Object.entries(leads).forEach(([id,text])=>{
+    const sec=document.getElementById(id); if(!sec) return;
+    const lead=sec.querySelector(':scope > .lead'); if(lead) lead.textContent=text;
+  });
+
+  const skip=el=>!!el.closest('.source,.frameDock,.newsModal');
+  document.querySelectorAll('.section .card p,.section .panel p,.section .whyCard p,.section .explain').forEach(el=>{
+    if(!skip(el)&&el.textContent.trim().length>78){el.classList.add('briefClamp');el.title=el.textContent.trim()}
+  });
+  document.querySelectorAll('.section .step span,.section .flowbox span,.section .node small').forEach(el=>{
+    if(!skip(el)&&el.textContent.trim().length>42){el.classList.add('briefClampOne');el.title=el.textContent.trim()}
+  });
+
+  const q=document.getElementById('s14');
+  if(q){
+    const demo=q.querySelector('.demo');
+    const source=q.querySelector('.source');
+    q.innerHTML=`
+      <div class="kicker">08 · 퀘스트</div>
+      <h2>깨달음에 ‘한 번 더’의 재미를 더합니다</h2>
+      <p class="lead">생각자국 AI가 역질문으로 스스로 깨닫게 한다면, 퀘스트는 미션·HP·보상으로 그 경험을 계속 이어가게 합니다.</p>
+      <div class="questCompact">
+        <div class="questBox">
+          <h3>🧠 생각자국의 기본 몰입</h3>
+          <div class="questFlow">
+            <div class="questStep">질문</div><div class="questArrow">→</div>
+            <div class="questStep">역질문</div><div class="questArrow">→</div>
+            <div class="questStep">스스로 깨달음</div>
+          </div>
+        </div>
+        <div class="questBox">
+          <h3>🎮 퀘스트가 더하는 것</h3>
+          <div class="questLayer">
+            <div class="questMini"><div class="questIcon">🎯</div><b>미션</b><span>오늘 학습을 도전으로</span></div>
+            <div class="questMini"><div class="questIcon">❤️</div><b>HP</b><span>집중과 휴식의 리듬</span></div>
+            <div class="questMini"><div class="questIcon">🧪</div><b>보상</b><span>다음 행동의 동기</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="msgbox">깨닫는 재미에, 다시 해보고 싶은 동기를 더합니다.</div>
+      <div class="questBottom" id="questDemoSlot"></div>`;
+    if(demo) document.getElementById('questDemoSlot')?.appendChild(demo);
+    if(source) q.appendChild(source);
+  }
+})();
+</script>
+'''
+          s = s.replace('</body>', js + '</body>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit patch and remove workflow
+        run: |
+          rm .github/workflows/one-time-brief-declutter.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add brief/teacher.html .github/workflows/one-time-brief-declutter.yml
+          git commit -m 'Declutter briefing text while preserving sources and modals'
+          git push
