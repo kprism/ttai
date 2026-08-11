@@ -118,3 +118,4 @@ jobs:
           git add brief/teacher.html .github/workflows/one-time-brief-declutter.yml
           git commit -m 'Declutter briefing text while preserving sources and modals'
           git push
+# trigger: 2026-08-11T12:53+09:00
