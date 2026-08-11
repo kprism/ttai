@@ -1,0 +1,35 @@
+name: Patch quest demo link
+on:
+  push:
+    paths:
+      - '.github/quest-link-trigger'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore quest demo link
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('brief/teacher.html')
+          s=p.read_text(encoding='utf-8')
+          old="../services/scenario-demo.html?scene=quest"
+          new="../services/quest-learning-demo.html?v=20260811-costudy1"
+          if old not in s:
+              raise SystemExit('quest link target not found')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit and cleanup
+        run: |
+          rm -f .github/quest-link-trigger .github/workflows/patch-quest-link.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add brief/teacher.html .github/quest-link-trigger .github/workflows/patch-quest-link.yml
+          git commit -m 'Restore quest demo and connect co-study prototype'
+          git push
