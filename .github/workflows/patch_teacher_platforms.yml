@@ -1,0 +1,35 @@
+name: Patch teacher domestic platform section
+on:
+  push:
+    paths:
+      - '.github/workflows/patch_teacher_platforms.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Replace section 04
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('brief/teacher.html')
+          s=p.read_text(encoding='utf-8')
+          new=r'''<section id="s5" class="section"><div class="kicker">04 · 국내플랫폼</div><h2>AI 교육은 이미 시작되었습니다</h2><p class="lead">경기·충남·경남은 이미 AI·빅데이터 기반 교수학습 플랫폼을 운영하고 있습니다. 이제 중요한 질문은 ‘AI를 도입했는가’가 아니라, <b>학생에게 어떤 학습경험을 제공하는가</b>입니다.</p><div class="grid2" style="align-items:stretch"><div class="panel" style="display:flex;flex-direction:column"><small style="color:var(--b);font-weight:950">현재 국내 AI 교육 플랫폼</small><div class="grid3" style="gap:8px;margin-top:8px"><div class="card" style="padding:13px"><h3 style="font-size:16px">🏫 경기 하이러닝</h3><p style="font-size:12px;margin-bottom:0">AI 진단·맞춤콘텐츠·문제추천·서논술형 평가·학습분석·수업설계</p></div><div class="card" style="padding:13px"><h3 style="font-size:16px">🤝 충남 마주온</h3><p style="font-size:12px;margin-bottom:0">수업·소통·협업·생성형 AI·AI 서논술평가 등 교육활동 지원</p></div><div class="card" style="padding:13px"><h3 style="font-size:16px">🌱 경남 아이톡톡</h3><p style="font-size:12px;margin-bottom:0">LMS·AI 맞춤학습·평가·화상수업·학습데이터·포트폴리오</p></div></div><div class="chart" style="margin-top:12px"><h3 style="margin-top:0">하이러닝 · 실제 이용자 학습도움 체감</h3><div class="barrow"><b>교사</b><div class="track"><div class="fill" style="width:83%"></div></div><b>83%</b></div><div class="barrow"><b>학생</b><div class="track"><div class="fill" style="width:90%"></div></div><b>90%</b></div><div class="barrow"><b>학생 흥미·참여</b><div class="track"><div class="fill" style="width:89%"></div></div><b>89%</b></div><div class="explain">2025년 하이러닝 이용 교사 1,426명·학생 3,317명, 총 4,742명 조사. 교사 83%는 교수·학습에 도움이 된다고, 학생 90%는 학습 전반에 도움이 된다고 응답했습니다.</div></div><div class="chart" style="margin-top:10px"><h3 style="margin-top:0">아이톡톡 · 공개 활용지표</h3><div class="barrow"><b>수업 활용 교사</b><div class="track"><div class="fill" style="width:60%"></div></div><b>약 60%</b></div><div class="grid3" style="gap:7px;margin-top:9px"><div class="card" style="padding:10px;text-align:center"><div class="num" style="font-size:24px">3만</div><small>일평균 접속자<br>2024</small></div><div class="card" style="padding:10px;text-align:center"><div class="num" style="font-size:24px">30만+</div><small>플랫폼 콘텐츠<br>2024</small></div><div class="card" style="padding:10px;text-align:center"><div class="num" style="font-size:24px">5TB+</div><small>학습데이터<br>2024</small></div></div><div class="explain">아이톡톡은 2023년 현장취재에서 도내 교사의 약 60%가 수업에 활용하는 것으로 소개됐고, 경남교육청은 2024년 도민보고회에서 일평균 접속자 약 3만명·콘텐츠 30만여개·학습데이터 5TB 이상을 공개했습니다. <b>하이러닝과 동일 문항의 만족도·학업도움 백분율은 이번 공개자료 검토에서 확인하지 못해 임의 수치를 넣지 않았습니다.</b></div></div><div class="source"><b>출처</b> 경기도교육청 · 2025 · 「경기 교사, 학생 10명 중 9명, ‘하이러닝, 수업에 효과 있어’」 / 경상남도교육청 미래교육원 · 2024 · 「아이톡톡·아이북 사업 도민 보고회」 / 교육부 출입기자단 현장취재 보도 · 2023 · 아이톡톡 수업 활용 현황</div></div><div class="panel" style="display:flex;flex-direction:column;background:linear-gradient(160deg,#fbfeff,#eef8ff)"><small style="color:var(--b);font-weight:950">학습도구 제공방식 비교</small><h3 style="font-size:24px;color:var(--n);margin:6px 0 8px">연결형 플랫폼에서 ‘내부 생성형’ 플랫폼으로</h3><p style="color:var(--m);line-height:1.65;margin-top:0">하이러닝과 아이톡톡은 이미 강한 교수학습 플랫폼입니다. 공개 수업사례에서는 전문 에듀테크를 함께 연결해 활용합니다. 생각자국 AI는 학생의 학습 흐름이 끊기지 않도록 핵심 학습도구를 플랫폼 안에서 바로 제공하는 구조를 목표로 합니다.</p><div style="display:grid;grid-template-columns:125px repeat(3,1fr);gap:5px;font-size:12px"><div></div><div style="font-weight:950;text-align:center;color:var(--n);padding:7px">하이러닝</div><div style="font-weight:950;text-align:center;color:var(--n);padding:7px">아이톡톡</div><div style="font-weight:950;text-align:center;color:var(--n);padding:7px">생각자국 AI</div><div class="step">AI 진단·추천</div><div class="step" style="text-align:center">플랫폼 내</div><div class="step" style="text-align:center">플랫폼 내</div><div class="step" style="text-align:center;background:#eaf6ff">사고상태까지</div><div class="step">교육과정·수업</div><div class="step" style="text-align:center">플랫폼 내</div><div class="step" style="text-align:center">플랫폼 내</div><div class="step" style="text-align:center;background:#eaf6ff">Agent 판단기준</div><div class="step">그래프·특수도구</div><div class="step" style="text-align:center">외부 에듀테크 병행</div><div class="step" style="text-align:center">외부 에듀테크 병행</div><div class="step" style="text-align:center;background:#eaf6ff">SVG/Canvas 즉시 생성</div><div class="step">역질문·반례</div><div class="step" style="text-align:center">핵심 구조 아님</div><div class="step" style="text-align:center">핵심 구조 아님</div><div class="step" style="text-align:center;background:#eaf6ff">핵심 AI Tutor</div><div class="step">사고변화 기록</div><div class="step" style="text-align:center">학습결과 중심</div><div class="step" style="text-align:center">학습이력 중심</div><div class="step" style="text-align:center;background:#eaf6ff">오개념→개념 변화</div></div><div class="whyBig" style="margin-top:12px">핵심 학습도구를 하나의 플랫폼 안에서<br>100% 지원할 수 있는 구조를 목표로</div><button class="demo" data-url="../services/platform-function-compare.html" style="margin-top:12px">🔍 하이러닝·아이톡톡·생각자국 AI 기능 상세 비교</button><div class="explain">‘외부 에듀테크 병행’은 단점이라는 뜻이 아닙니다. 생각자국 AI는 그래프·도형·표·질문·힌트·반례·문제처럼 학생의 즉각적 사고활동에 필요한 도구를 내부에서 생성해 <b>사이트 이동과 학습 흐름 단절을 최소화</b>하려는 방향입니다.</div><div class="source"><b>기능 비교 근거</b> 경기도교육청 「AI 활용 맞춤형 교육 가이드 I·II」(2023), 「하이러닝, 수업의 패러다임을 바꾸다」(2024) / 경상남도교육청 미래교육원 아이톡톡 공식 서비스 안내 및 2024~2025 아이톡톡-아이북 활용 수업사례. 생각자국 AI는 현재 개발 설계·프로토타입 기준입니다.</div></div></div><div class="msgbox">AI 교육 플랫폼은 이미 현장에 들어와 있습니다. 다음 경쟁은 ‘AI가 있느냐’가 아니라, <b>학생의 학습과 사고를 한 흐름 안에서 어디까지 지원할 수 있느냐</b>입니다.</div></section>'''
+          pattern=r'<section id="s5" class="section">.*?</section>'
+          ns,n=re.subn(pattern,new,s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit(f's5 replace count={n}')
+          p.write_text(ns,encoding='utf-8')
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "ttai-builder"
+          git config user.email "actions@users.noreply.github.com"
+          git add brief/teacher.html
+          git commit -m "Redesign domestic AI platform overview section" || exit 0
+          git push origin main
