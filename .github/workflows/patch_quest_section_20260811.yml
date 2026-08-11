@@ -1,0 +1,38 @@
+name: Patch quest briefing section
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch_quest_section_20260811.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enrich quest section
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('brief/teacher.html')
+          text = path.read_text(encoding='utf-8')
+          new = '''<section id="s14" class="section"><div class="kicker">08 · 퀘스트</div><h2>생각이 깊어지는 과정에, ‘도전의 재미’를 더합니다</h2><p class="lead">생각자국 AI의 기본 학습은 학생의 질문에서 시작해 AI의 역질문을 받고, 근거와 반례를 살피며 스스로 모순을 자각하고 개념을 다시 세우는 과정입니다. <b style="color:var(--n)">퀘스트는 이 몰입 흐름 위에 재미·관심·도전 요소를 더해, 학생이 다음 학습행동을 스스로 이어가게 하는 장치</b>입니다.</p><div class="grid3" style="margin-top:8px"><div class="card" style="background:linear-gradient(160deg,#f7fbff,#eef7ff)"><div style="font-size:34px;margin-bottom:8px">❓</div><h3>1. 학생의 질문에서 시작</h3><p>“왜 그런가요?”, “이게 항상 맞나요?”처럼 학생이 가진 생각을 먼저 꺼냅니다. AI가 정답을 선점하지 않고 학생의 현재 개념을 드러내는 출발점입니다.</p></div><div class="card" style="background:linear-gradient(160deg,#fffaf2,#fff5e5)"><div style="font-size:34px;margin-bottom:8px">🧠</div><h3>2. 역질문으로 모순을 스스로 발견</h3><p>AI가 근거·예외·반례를 다시 묻습니다. 대화를 이어가다 보면 학생은 “내 생각에 빠진 부분이 있네”라는 지점을 스스로 발견하게 됩니다.</p></div><div class="card" style="background:linear-gradient(160deg,#f3fff9,#eafaf3)"><div style="font-size:34px;margin-bottom:8px">💡</div><h3>3. 자기 언어로 개념을 다시 세움</h3><p>깨달은 내용을 다시 설명하고 새로운 문제에 적용합니다. 정답을 전달받은 것이 아니라 <b>학생 자신의 사고과정 안에서 개념이 재구성</b>됩니다.</p></div></div><div class="panel" style="margin-top:15px;padding:22px;background:linear-gradient(135deg,#071d67,#0a4caf 55%,#158dca);color:#fff;border:0"><div class="grid2" style="align-items:center"><div><small style="font-weight:950;color:#8ee9ff">QUEST LAYER</small><h3 style="font-size:27px;margin:6px 0 8px">여기에 ‘한 번 더 해보고 싶은 이유’를 얹습니다</h3><p style="margin:0;color:#e8f4ff;line-height:1.75">소크라테스식 대화 자체도 몰입감이 있지만, 퀘스트는 미션·HP·보상·회복이라는 가벼운 게임 장치를 더합니다. 핵심은 경쟁이 아니라 <b style="color:#fff">관심을 붙잡고, 도전하고, 필요할 때 쉬고, 다시 학습으로 돌아오는 자기조절</b>입니다.</p></div><div class="grid2" style="gap:9px"><div class="step" style="background:#ffffff17;border-color:#ffffff2e;color:#fff">🎯 <b>미션</b><br><span style="color:#dceeff;font-weight:600">오늘의 학습을 ‘깨고 싶은 도전’으로</span></div><div class="step" style="background:#ffffff17;border-color:#ffffff2e;color:#fff">❤️ <b>HP</b><br><span style="color:#dceeff;font-weight:600">집중과 휴식의 리듬을 스스로 관리</span></div><div class="step" style="background:#ffffff17;border-color:#ffffff2e;color:#fff">🧪 <b>포션·보상</b><br><span style="color:#dceeff;font-weight:600">학습행동과 회복을 눈에 보이게</span></div><div class="step" style="background:#ffffff17;border-color:#ffffff2e;color:#fff">🔥 <b>도전감</b><br><span style="color:#dceeff;font-weight:600">다음 질문·문제를 이어갈 동기 강화</span></div></div></div></div><button class="demo" style="width:100%;margin-top:15px" onclick="openFrame('퀘스트·학습대화·HP·포션 시연','../services/scenario-demo.html?scene=quest')">🎮 퀘스트·학습대화·HP·포션 직접 시연</button><div class="msgbox" style="margin-top:14px">생각자국 AI가 <b>‘스스로 깨닫는 재미’</b>를 만든다면, 퀘스트는 그 경험을 <b>‘한 번 더 이어가고 싶은 도전’</b>으로 확장합니다.</div></section>\n'''
+          pattern = re.compile(r'<section id="s14" class="section">.*?(?=<section id="s16" class="section">)', re.S)
+          updated, n = pattern.subn(new, text, count=1)
+          if n != 1:
+              raise SystemExit(f'quest section replacement count={n}')
+          path.write_text(updated, encoding='utf-8')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add brief/teacher.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Enrich quest briefing with learning flow and engagement layer'
+          git push
