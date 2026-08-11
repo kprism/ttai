@@ -1,0 +1,64 @@
+name: Patch nested media permissions
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-media-permissions.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch media permission chain
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          # 1) Nested showcase iframe must explicitly delegate camera/microphone.
+          p = Path('services/interactive-showcase.html')
+          s = p.read_text(encoding='utf-8')
+          old = '<iframe id="demoFrame" title="생각자국 AI 인터랙티브 실제 화면"></iframe>'
+          new = '<iframe id="demoFrame" title="생각자국 AI 인터랙티브 실제 화면" allow="camera; microphone"></iframe>'
+          if old in s:
+              s = s.replace(old, new)
+          elif 'id="demoFrame"' in s and 'allow="camera; microphone"' not in s:
+              s = s.replace('id="demoFrame"', 'id="demoFrame" allow="camera; microphone"', 1)
+          p.write_text(s, encoding='utf-8')
+
+          # 2) Direct study preview iframe in briefing should also delegate permissions.
+          p = Path('brief/teacher.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('<iframe src="../services/study-live-caption-demo.html?v=20260811live2" title="스터디그룹 실시간 자막 시연"></iframe>',
+                        '<iframe src="../services/study-live-caption-demo.html?v=20260811media1" title="스터디그룹 실시간 자막 시연" allow="camera; microphone"></iframe>')
+          # Cache-bust modal wrapper to ensure the fixed nested iframe is loaded.
+          s = s.replace('interactive-showcase.html?v=20260811live2&demo=study', 'interactive-showcase.html?v=20260811media1&demo=study')
+          p.write_text(s, encoding='utf-8')
+
+          # 3) Ask for microphone permission explicitly before SpeechRecognition.
+          p = Path('services/study-live-caption-demo.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('let selected=tiles[0],stream=null,video=null,recognition=null,micOn=false,finalCount=0;',
+                        'let selected=tiles[0],stream=null,audioStream=null,video=null,recognition=null,micOn=false,finalCount=0;')
+          s = s.replace('function startMic(){const SR=', 'async function startMic(){const SR=')
+          marker = "if(micOn){stopMic();return}recognition=new SR();"
+          insert = "if(micOn){stopMic();return}try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('mediaDevices unavailable');audioStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});status.textContent='마이크 권한이 허용되었습니다. 실시간 자막을 시작합니다.'}catch(e){showWarn('마이크 권한을 사용할 수 없습니다. 주소창 왼쪽의 사이트 설정에서 마이크를 허용한 뒤 다시 눌러주세요.');return}recognition=new SR();"
+          if marker in s:
+              s = s.replace(marker, insert, 1)
+          # Stop the explicit permission stream when mic is stopped.
+          if 'function stopMic(){' in s and 'audioStream.getTracks' not in s:
+              s = s.replace('function stopMic(){', "function stopMic(){if(audioStream){audioStream.getTracks().forEach(t=>t.stop());audioStream=null}", 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit fixes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add services/interactive-showcase.html services/study-live-caption-demo.html brief/teacher.html
+          if git diff --cached --quiet; then
+            echo 'No changes needed'
+          else
+            git commit -m 'Fix nested camera and microphone permission flow'
+            git push
+          fi
