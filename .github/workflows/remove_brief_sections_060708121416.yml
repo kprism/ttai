@@ -1,0 +1,55 @@
+name: Remove selected teacher briefing sections
+on:
+  push:
+    paths:
+      - '.github/workflows/remove_brief_sections_060708121416.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Remove briefing sections 06 07 08 12 14 16
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('brief/teacher.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Visible briefing number -> current section id
+          targets = {
+              '06': 's6',   # 하이러닝 비교
+              '07': 's7',   # 연구근거
+              '08': 's8',   # 교육모델
+              '12': 's13',  # 성장·성취
+              '14': 's15',  # 선생님지원
+              '16': 's17',  # 진로
+          }
+
+          # Remove top navigation entries that point to the deleted sections.
+          for sid in targets.values():
+              s = re.sub(rf'<a\s+href="#{re.escape(sid)}">.*?</a>', '', s)
+
+          # Remove the six complete presentation sections only.
+          for sid in targets.values():
+              pattern = rf'\n?<section\s+id="{re.escape(sid)}"\s+class="section">.*?</section>\n?'
+              s, n = re.subn(pattern, '\n', s, count=1, flags=re.S)
+              if n != 1:
+                  raise SystemExit(f'Expected exactly one section for {sid}, removed {n}')
+
+          # Keep service/demo files intact. Only the teacher briefing presentation is changed.
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit briefing cleanup
+        run: |
+          git config user.name "ttai-builder"
+          git config user.email "actions@users.noreply.github.com"
+          rm .github/workflows/remove_brief_sections_060708121416.yml
+          git add brief/teacher.html .github/workflows/remove_brief_sections_060708121416.yml
+          git commit -m "Remove briefing sections 06 07 08 12 14 and 16"
+          git push origin main
