@@ -1,0 +1,55 @@
+name: Patch showcase bubbles and live media
+on:
+  push:
+    paths:
+      - '.github/workflows/patch_showcase_bubbles_live_media.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Patch showcase wrappers and cache bust
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def patch_showcase(path, student=False):
+              p=Path(path)
+              s=p.read_text(encoding='utf-8')
+              # 연결 막대 제거, 말풍선은 클릭 가능하도록 변경
+              s=s.replace('.leader{position:absolute;', '.leader{display:none!important;position:absolute;', 1)
+              s=s.replace('pointer-events:none}.bubble.show', 'pointer-events:auto;cursor:pointer}.bubble.show', 1)
+              # 빨간 점을 다시 누르거나 말풍선을 누르면 닫히게 변경
+              s=s.replace("b.addEventListener('click',()=>show(i,true));", "b.addEventListener('click',()=>togglePoint(i));", 1)
+              marker='function show(i,scroll){'
+              if marker in s and 'function hideBubble(){' not in s:
+                  helper="function hideBubble(){active=-1;dots.forEach(d=>d.classList.remove('active'));E.bubble.classList.remove('show');E.leader.style.width='0'}\nfunction togglePoint(i){if(active===i&&E.bubble.classList.contains('show')){hideBubble();return}show(i,true)}\n"
+                  s=s.replace(marker, helper+marker, 1)
+              if "E.bubble.addEventListener('click',hideBubble);" not in s:
+                  s=s.replace("E.replay.addEventListener('click',()=>beginIntro(true));", "E.bubble.addEventListener('click',hideBubble);\nE.replay.addEventListener('click',()=>beginIntro(true));", 1)
+              # 최신 실시간 카메라/마이크 데모 강제 로딩
+              s=s.replace("url:'study-live-caption-demo.html'", "url:'study-live-caption-demo.html?v=20260811live2'")
+              p.write_text(s,encoding='utf-8')
+
+          patch_showcase('services/core-services-showcase.html')
+          patch_showcase('services/interactive-showcase.html', True)
+
+          p=Path('brief/teacher.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('../services/study-live-caption-demo.html"', '../services/study-live-caption-demo.html?v=20260811live2"')
+          s=s.replace('interactive-showcase.html?v=20260811fix1&demo=', 'interactive-showcase.html?v=20260811live2&demo=')
+          s=s.replace('core-services-showcase.html?v=20260811fix1&service=', 'core-services-showcase.html?v=20260811live2&service=')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit changes and remove workflow
+        run: |
+          git config user.name "ttai-builder"
+          git config user.email "actions@users.noreply.github.com"
+          rm .github/workflows/patch_showcase_bubbles_live_media.yml
+          git add services/core-services-showcase.html services/interactive-showcase.html brief/teacher.html .github/workflows/patch_showcase_bubbles_live_media.yml
+          git commit -m "Refine showcase bubbles and load real live media demo"
+          git push origin main
