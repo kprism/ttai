@@ -1,71 +1,13 @@
-const studioV2Styles=document.createElement('link');
-studioV2Styles.rel='stylesheet';
-studioV2Styles.href='./studio-v2.css?v=260815-1';
-document.head.appendChild(studioV2Styles);
-
-const pathButton=document.getElementById('learningPathButton');
-const pathDrawer=document.getElementById('pathDrawer');
-const closePathButton=document.getElementById('closePathButton');
-const backdrop=document.getElementById('drawerBackdrop');
-const companionToggle=document.getElementById('companionToggle');
-const companionPanel=document.getElementById('companionPanel');
-const avatar=document.getElementById('socratesAvatar');
-const voiceButton=document.getElementById('voiceButton');
-const thoughtInput=document.getElementById('thoughtInput');
-const pastePreview=document.getElementById('pastePreview');
-const sendButton=document.getElementById('sendButton');
-const dialogueScroll=document.getElementById('dialogueScroll');
-const historyRail=document.querySelector('.history-rail');
-let pastedImages=[];
-
-function setDrawer(open){pathDrawer.hidden=!open;backdrop.hidden=!open;pathButton.setAttribute('aria-expanded',String(open));}
-pathButton.addEventListener('click',()=>setDrawer(pathDrawer.hidden));
-closePathButton.addEventListener('click',()=>setDrawer(false));
-backdrop.addEventListener('click',()=>setDrawer(false));
-companionToggle.addEventListener('click',()=>{const next=companionToggle.getAttribute('aria-pressed')!=='true';companionToggle.setAttribute('aria-pressed',String(next));companionPanel.hidden=!next;avatar?.classList.toggle('state-listen',next);});
-voiceButton.addEventListener('click',()=>{const active=voiceButton.dataset.active==='1';voiceButton.dataset.active=active?'0':'1';voiceButton.textContent=active?'🎤 말하기':'■ 듣고 있어요';avatar?.classList.toggle('state-listen',!active);});
-
-function renderPastePreview(){
-  pastePreview.innerHTML='';
-  pastePreview.hidden=pastedImages.length===0;
-  pastedImages.forEach((item,index)=>{
-    const card=document.createElement('div');card.className='pasted-image-card';
-    const img=document.createElement('img');img.src=item.url;img.alt='붙여넣은 캡처 이미지';
-    const meta=document.createElement('div');meta.className='paste-meta';meta.innerHTML=`<strong>붙여넣은 이미지</strong><span>${Math.round(item.file.size/1024)} KB</span>`;
-    const remove=document.createElement('button');remove.type='button';remove.className='paste-remove';remove.setAttribute('aria-label','붙여넣은 이미지 삭제');remove.textContent='×';
-    remove.addEventListener('click',()=>{URL.revokeObjectURL(item.url);pastedImages.splice(index,1);renderPastePreview();thoughtInput.focus();});
-    card.append(img,meta,remove);pastePreview.appendChild(card);
-  });
-}
-
-thoughtInput.addEventListener('paste',event=>{
-  const items=[...(event.clipboardData?.items||[])];
-  const images=items.filter(item=>item.type.startsWith('image/'));
-  if(!images.length)return;
-  event.preventDefault();
-  images.forEach(item=>{const file=item.getAsFile();if(file)pastedImages.push({file,url:URL.createObjectURL(file)});});
-  const text=event.clipboardData.getData('text/plain');
-  if(text){const start=thoughtInput.selectionStart,end=thoughtInput.selectionEnd;thoughtInput.value=thoughtInput.value.slice(0,start)+text+thoughtInput.value.slice(end);}
-  renderPastePreview();
-});
-
-function makeHistoryChip(label,summary,index){const chip=document.createElement('button');chip.type='button';chip.className='history-chip';chip.dataset.turn=String(index);chip.innerHTML=`<small>${label}</small><span>${summary}</span>`;historyRail.appendChild(chip);chip.addEventListener('click',()=>scrollToTurn(index));}
-function bindHistoryChips(){document.querySelectorAll('.history-chip').forEach(chip=>chip.addEventListener('click',()=>scrollToTurn(Number(chip.dataset.turn))));}
-function scrollToTurn(index){const turns=[...document.querySelectorAll('.turn')];turns[index]?.scrollIntoView({behavior:'smooth',block:'center'});document.querySelectorAll('.history-chip').forEach((chip,i)=>chip.classList.toggle('active',i===index));}
-bindHistoryChips();
-
-sendButton.addEventListener('click',()=>{
-  const text=thoughtInput.value.trim();
-  if(!text&&!pastedImages.length){thoughtInput.focus();return;}
-  const turn=document.createElement('div');turn.className='turn student-turn new-turn';turn.dataset.summary=text||'이미지로 생각을 공유했어.';
-  const label=document.createElement('p');label.className='turn-label';label.textContent='내 생각';turn.appendChild(label);
-  if(pastedImages.length){const gallery=document.createElement('div');gallery.className='message-gallery';pastedImages.forEach(item=>{const img=document.createElement('img');img.src=item.url;img.alt='대화에 첨부한 캡처 이미지';gallery.appendChild(img);});turn.appendChild(gallery);}
-  if(text){const answer=document.createElement('div');answer.className='student-answer';answer.textContent=text;turn.appendChild(answer);}
-  dialogueScroll.appendChild(turn);
-  const turns=[...document.querySelectorAll('.turn')];
-  const summary=(text||'캡처 이미지를 보고 생각을 공유했어.').slice(0,44)+(text.length>44?'…':'');
-  makeHistoryChip('내 생각',summary,turns.length-1);
-  thoughtInput.value='';pastedImages=[];renderPastePreview();
-  requestAnimationFrame(()=>dialogueScroll.scrollTo({top:dialogueScroll.scrollHeight,behavior:'smooth'}));
-});
-thoughtInput.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter')sendButton.click();});
+const studioV2Styles=document.createElement('link');studioV2Styles.rel='stylesheet';studioV2Styles.href='./studio-v2.css?v=260815-2';document.head.appendChild(studioV2Styles);
+const $=id=>document.getElementById(id);const pathButton=$('learningPathButton'),pathDrawer=$('pathDrawer'),closePathButton=$('closePathButton'),backdrop=$('drawerBackdrop'),companionToggle=$('companionToggle'),companionPanel=$('companionPanel'),avatar=$('socratesAvatar'),voiceButton=$('voiceButton'),thoughtInput=$('thoughtInput'),pastePreview=$('pastePreview'),sendButton=$('sendButton'),dialogueScroll=$('dialogueScroll'),openingState=$('openingState'),conversationState=$('conversationState'),historyRail=$('historyRail'),historyToggle=$('historyToggle'),historyClose=$('historyClose'),historyCount=$('historyCount'),profileButton=$('profileButton'),profileMenu=$('profileMenu');let pastedImages=[],historyItems=[];
+function setDrawer(open){pathDrawer.hidden=!open;backdrop.hidden=!open;pathButton.setAttribute('aria-expanded',String(open))}pathButton.onclick=()=>setDrawer(pathDrawer.hidden);closePathButton.onclick=()=>setDrawer(false);backdrop.onclick=()=>setDrawer(false);
+profileButton.onclick=e=>{e.stopPropagation();profileMenu.hidden=!profileMenu.hidden;profileButton.setAttribute('aria-expanded',String(!profileMenu.hidden))};document.addEventListener('click',e=>{if(!profileMenu.hidden&&!profileMenu.contains(e.target)&&e.target!==profileButton){profileMenu.hidden=true;profileButton.setAttribute('aria-expanded','false')}});
+companionToggle.onclick=()=>{const next=companionToggle.getAttribute('aria-pressed')!=='true';companionToggle.setAttribute('aria-pressed',String(next));if(companionPanel)companionPanel.hidden=!next;avatar?.classList.toggle('state-listen',next)};
+function addHistory(label,text){historyItems.push({label,text});historyCount.textContent=historyItems.length;historyToggle.hidden=false;const b=document.createElement('button');b.className='history-chip';b.type='button';b.innerHTML=`<small>${label}</small><span>${text}</span>`;historyRail.appendChild(b)}
+historyToggle.onclick=()=>historyRail.classList.toggle('collapsed');historyClose.onclick=()=>historyRail.classList.add('collapsed');
+function addMessage(role,text,images=[]){const row=document.createElement('div');row.className=`message-row ${role}`;const profile=document.createElement('div');profile.className='message-profile';profile.textContent=role==='student'?'👦':'🧔🏻';const stack=document.createElement('div');stack.className='message-stack';const name=document.createElement('div');name.className='message-name';name.textContent=role==='student'?'민준':'소크라테스';stack.appendChild(name);if(images.length){const gallery=document.createElement('div');gallery.className='message-gallery';images.forEach(item=>{const img=document.createElement('img');img.src=item.url;img.alt='첨부 이미지';gallery.appendChild(img)});stack.appendChild(gallery)}if(text){const bubble=document.createElement('div');bubble.className='message-bubble';bubble.textContent=text;stack.appendChild(bubble)}if(role==='student')row.append(stack,profile);else row.append(profile,stack);dialogueScroll.appendChild(row);addHistory(role==='student'?'내 생각':'소크라테스',text||'이미지 첨부');requestAnimationFrame(()=>dialogueScroll.scrollTo({top:dialogueScroll.scrollHeight,behavior:'smooth'}))}
+function beginConversation(kind){openingState.hidden=true;conversationState.hidden=false;if(kind==='unknown'){addMessage('student','잘 모르겠어.');addMessage('coach','괜찮아. 그럼 그림에서 같이 움직이고 있는 두 가지부터 찾아볼까?')}else if(kind==='idea'){addMessage('coach','좋아. 정답인지 걱정하지 말고, 처음 떠오른 생각을 네 말로 적어줘.');setTimeout(()=>thoughtInput.focus(),50)}else{addMessage('coach','좋아. 편하게 말해봐. 네 생각을 먼저 들어볼게.');setTimeout(()=>voiceButton.click(),80)}}document.querySelectorAll('[data-opening]').forEach(b=>b.onclick=()=>beginConversation(b.dataset.opening));
+function renderPastePreview(){pastePreview.innerHTML='';pastePreview.hidden=!pastedImages.length;pastedImages.forEach((item,index)=>{const card=document.createElement('div');card.className='pasted-image-card';const img=document.createElement('img');img.src=item.url;const meta=document.createElement('div');meta.className='paste-meta';meta.innerHTML=`<strong>붙여넣은 이미지</strong><span>${Math.round(item.file.size/1024)} KB</span>`;const remove=document.createElement('button');remove.className='paste-remove';remove.type='button';remove.textContent='×';remove.onclick=()=>{URL.revokeObjectURL(item.url);pastedImages.splice(index,1);renderPastePreview();thoughtInput.focus()};card.append(img,meta,remove);pastePreview.appendChild(card)})}
+thoughtInput.addEventListener('paste',e=>{const items=[...(e.clipboardData?.items||[])],images=items.filter(i=>i.type.startsWith('image/'));if(!images.length)return;e.preventDefault();images.forEach(i=>{const file=i.getAsFile();if(file)pastedImages.push({file,url:URL.createObjectURL(file)})});const text=e.clipboardData.getData('text/plain');if(text){const s=thoughtInput.selectionStart,n=thoughtInput.selectionEnd;thoughtInput.value=thoughtInput.value.slice(0,s)+text+thoughtInput.value.slice(n)}renderPastePreview()});
+voiceButton.onclick=()=>{const active=voiceButton.dataset.active==='1';voiceButton.dataset.active=active?'0':'1';voiceButton.textContent=active?'🎤 말하기':'■ 듣고 있어요'};
+sendButton.onclick=()=>{const text=thoughtInput.value.trim();if(!text&&!pastedImages.length){thoughtInput.focus();return}addMessage('student',text,[...pastedImages]);thoughtInput.value='';pastedImages=[];renderPastePreview();setTimeout(()=>addMessage('coach','좋아. 그 생각에서 가장 중요한 이유 하나만 골라서 말해볼래?'),450)};thoughtInput.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')sendButton.click()});
