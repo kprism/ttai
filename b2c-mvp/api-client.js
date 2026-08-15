@@ -4,7 +4,7 @@
   const SESSION_KEY = 'ttai-study-session-id';
   const API_KEY = 'ttai-api-base';
 
-  const defaultBase = window.TTAI_API_BASE || localStorage.getItem(API_KEY) || 'http://127.0.0.1:8001';
+  const defaultBase = window.TTAI_API_BASE || localStorage.getItem(API_KEY) || 'https://ttai-b2c-api-zvpzx6th5q-du.a.run.app';
 
   function base() {
     return (localStorage.getItem(API_KEY) || window.TTAI_API_BASE || defaultBase).replace(/\/$/, '');
