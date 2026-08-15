@@ -4,7 +4,6 @@
   const SESSION_KEY = 'ttai-study-session-id';
   const API_KEY = 'ttai-api-base';
 
-  // 배포 후 GCP HTTPS API 주소를 localStorage 또는 runtime 설정으로 주입한다.
   const defaultBase = window.TTAI_API_BASE || localStorage.getItem(API_KEY) || 'http://127.0.0.1:8001';
 
   function base() {
@@ -15,18 +14,24 @@
     try { return JSON.parse(localStorage.getItem(USER_KEY) || 'null'); }
     catch (_) { return null; }
   }
+  function cacheUser(nextUser) {
+    if (!nextUser) return;
+    localStorage.setItem(USER_KEY, JSON.stringify(nextUser));
+    localStorage.setItem('ttai-profile', JSON.stringify(nextUser));
+  }
   function setSession(auth) {
     if (auth?.access_token) localStorage.setItem(TOKEN_KEY, auth.access_token);
-    if (auth?.user) {
-      localStorage.setItem(USER_KEY, JSON.stringify(auth.user));
-      // UI 캐시만 유지. 서버 DB가 원본이다.
-      localStorage.setItem('ttai-profile', JSON.stringify(auth.user));
-    }
+    if (auth?.user) cacheUser(auth.user);
   }
   function logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(SESSION_KEY);
+  }
+  function assetUrl(path) {
+    if (!path) return '';
+    if (/^https?:\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    return `${base()}${path.startsWith('/') ? '' : '/'}${path}`;
   }
   async function request(path, options = {}) {
     const headers = new Headers(options.headers || {});
@@ -55,15 +60,26 @@
 
   window.TTAI = {
     base,
+    assetUrl,
     setApiBase(value) { localStorage.setItem(API_KEY, value.replace(/\/$/, '')); },
     token,
     user,
+    cacheUser,
     setSession,
     logout,
     isLoggedIn: () => !!token(),
     register: data => request('/api/auth/register', { method: 'POST', body: JSON.stringify(data) }).then(x => (setSession(x), x)),
     login: data => request('/api/auth/login', { method: 'POST', body: JSON.stringify(data) }).then(x => (setSession(x), x)),
     me: () => request('/api/me'),
+    profilePhoto: () => request('/api/me/photo'),
+    uploadProfilePhoto: file => {
+      const form = new FormData();
+      form.append('file', file, file.name || 'profile.jpg');
+      return request('/api/me/photo', { method: 'POST', body: form }).then(x => {
+        if (x?.user) cacheUser(x.user);
+        return x;
+      });
+    },
     growth: () => request('/api/growth/me'),
     curriculumProgress: subject => request(`/api/curriculum/progress/me${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`),
     curriculumMap: params => {
