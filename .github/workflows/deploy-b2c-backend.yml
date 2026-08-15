@@ -1,0 +1,104 @@
+name: Deploy B2C backend to Cloud Run
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'b2c-backend/**'
+      - '.github/workflows/deploy-b2c-backend.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ttai-b2c-backend-deploy
+  cancel-in-progress: true
+
+env:
+  SERVICE_NAME: ttai-b2c-api
+  REGION: asia-northeast3
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+
+      - name: Enable required Google Cloud APIs
+        run: |
+          gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com --project='${{ secrets.GCP_PROJECT_ID }}'
+
+      - name: Deploy backend from source
+        run: |
+          gcloud run deploy "$SERVICE_NAME" \
+            --source ./b2c-backend \
+            --project='${{ secrets.GCP_PROJECT_ID }}' \
+            --region="$REGION" \
+            --platform=managed \
+            --allow-unauthenticated \
+            --set-env-vars='^@^DATABASE_URL=${{ secrets.DATABASE_URL }}@OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}@JWT_SECRET=${{ secrets.JWT_SECRET }}@CORS_ORIGINS=https://kprism.github.io'
+
+      - name: Resolve Cloud Run URL
+        id: service
+        shell: bash
+        run: |
+          URL="$(gcloud run services describe "$SERVICE_NAME" --project='${{ secrets.GCP_PROJECT_ID }}' --region="$REGION" --format='value(status.url)')"
+          test -n "$URL"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Cloud Run URL: $URL"
+
+      - name: Health check
+        shell: bash
+        run: |
+          for i in {1..20}; do
+            if curl -fsS '${{ steps.service.outputs.url }}/health'; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo 'Health check failed.' >&2
+          exit 1
+
+      - name: Point GitHub Pages frontend to deployed API
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os, re
+          p = Path('b2c-mvp/api-client.js')
+          text = p.read_text(encoding='utf-8')
+          url = os.environ['DEPLOYED_API_URL'].rstrip('/')
+          pattern = r"const defaultBase = .*?;"
+          replacement = "const defaultBase = window.TTAI_API_BASE || localStorage.getItem(API_KEY) || %r;" % url
+          text2, n = re.subn(pattern, replacement, text, count=1)
+          if n != 1:
+              raise SystemExit('Could not locate defaultBase in api-client.js')
+          p.write_text(text2, encoding='utf-8')
+          PY
+        env:
+          DEPLOYED_API_URL: '${{ steps.service.outputs.url }}'
+
+      - name: Commit API endpoint to frontend
+        shell: bash
+        run: |
+          if git diff --quiet -- b2c-mvp/api-client.js; then
+            echo 'Frontend API endpoint already current.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add b2c-mvp/api-client.js
+          git commit -m 'Point B2C frontend to deployed Cloud Run API'
+          git push
