@@ -68,6 +68,52 @@ class AchievementStandard(Base):
     keywords: Mapped[list] = mapped_column(JSON, default=list)
     source_ref: Mapped[str | None] = mapped_column(Text, nullable=True)
 
+class CurriculumConceptStrand(Base):
+    """초·중·고를 관통하는 개념 축. 예: 힘과 운동, 물질, 생명, 지구와 우주."""
+    __tablename__ = "curriculum_concept_strands"
+    __table_args__ = (UniqueConstraint("version_id", "subject_family", "code", name="uq_curriculum_strand"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    version_id: Mapped[int] = mapped_column(ForeignKey("curriculum_versions.id", ondelete="CASCADE"), index=True)
+    subject_family: Mapped[str] = mapped_column(String(80), index=True)
+    code: Mapped[str] = mapped_column(String(80), index=True)
+    name: Mapped[str] = mapped_column(String(160), index=True)
+    core_idea: Mapped[str | None] = mapped_column(Text, nullable=True)
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_ref: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+class CurriculumUnitStrand(Base):
+    """각 학년/학교급 단원을 하나 이상의 종적 개념 축에 배치한다."""
+    __tablename__ = "curriculum_unit_strands"
+    __table_args__ = (UniqueConstraint("unit_id", "strand_id", name="uq_unit_strand"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    unit_id: Mapped[int] = mapped_column(ForeignKey("curriculum_units.id", ondelete="CASCADE"), index=True)
+    strand_id: Mapped[int] = mapped_column(ForeignKey("curriculum_concept_strands.id", ondelete="CASCADE"), index=True)
+    progression_order: Mapped[int] = mapped_column(Integer, default=0, index=True)
+    role: Mapped[str] = mapped_column(String(30), default="core")
+    source_ref: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+class CurriculumUnitConnection(Base):
+    """교육과정 맵의 횡·종 연결선.
+
+    relation_type 예:
+    prerequisite, next, vertical, horizontal, cross_subject, school_transition, related.
+    운영자가 승인한 연결만 실제 추천/진도 계산에 사용한다.
+    """
+    __tablename__ = "curriculum_unit_connections"
+    __table_args__ = (UniqueConstraint("from_unit_id", "to_unit_id", "relation_type", name="uq_curriculum_connection"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    from_unit_id: Mapped[int] = mapped_column(ForeignKey("curriculum_units.id", ondelete="CASCADE"), index=True)
+    to_unit_id: Mapped[int] = mapped_column(ForeignKey("curriculum_units.id", ondelete="CASCADE"), index=True)
+    relation_type: Mapped[str] = mapped_column(String(40), index=True)
+    direction: Mapped[str] = mapped_column(String(20), default="directed")
+    strength: Mapped[int] = mapped_column(Integer, default=100)
+    rationale: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_type: Mapped[str] = mapped_column(String(30), default="official")
+    source_ref: Mapped[str | None] = mapped_column(Text, nullable=True)
+    status: Mapped[str] = mapped_column(String(20), default="approved", index=True)
+    meta: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
 class StudentCurriculumProgress(Base):
     """학생이 국가 교육과정 지도에서 현재 어디까지 왔는지 기록한다.
 
@@ -80,10 +126,10 @@ class StudentCurriculumProgress(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     curriculum_version_id: Mapped[int] = mapped_column(ForeignKey("curriculum_versions.id"), index=True)
     unit_id: Mapped[int] = mapped_column(ForeignKey("curriculum_units.id", ondelete="CASCADE"), index=True)
-    status: Mapped[str] = mapped_column(String(20), default="not_started", index=True)  # not_started/in_progress/mastered
+    status: Mapped[str] = mapped_column(String(20), default="not_started", index=True)
     current_stage: Mapped[str] = mapped_column(String(30), default="개념기초")
     highest_stage: Mapped[str] = mapped_column(String(30), default="개념기초")
-    stage_index: Mapped[int] = mapped_column(Integer, default=0)  # 0~5
+    stage_index: Mapped[int] = mapped_column(Integer, default=0)
     mastery_score: Mapped[int] = mapped_column(Integer, default=0)
     attempts: Mapped[int] = mapped_column(Integer, default=0)
     thought_revisions: Mapped[int] = mapped_column(Integer, default=0)
