@@ -3,8 +3,12 @@ from __future__ import annotations
 import os
 from openai import OpenAI
 
-MODEL = os.getenv("OPENAI_MODEL", "gpt-5-mini")
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) if os.getenv("OPENAI_API_KEY") else None
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    timeout=15.0,
+    max_retries=1,
+) if os.getenv("OPENAI_API_KEY") else None
 
 SOCRATIC_INSTRUCTIONS = """너는 생각자국AI의 소크라테스형 학습코치다.
 학생에게 정답을 바로 주지 말고, 현재 학년과 교과 수준에 맞춰 한 번에 하나의 질문만 던져 스스로 이유를 말하고 생각을 수정하게 한다.
@@ -16,18 +20,33 @@ SOCRATIC_INSTRUCTIONS = """너는 생각자국AI의 소크라테스형 학습코
 한 응답에서는 핵심 질문 하나에만 집중한다.
 """
 
+
 def build_context(grade: str | None, subject: str, unit: str, stage: str, messages: list[dict]) -> list[dict]:
-    context = [{"role": "developer", "content": f"{SOCRATIC_INSTRUCTIONS}\n학생 학년: {grade or '미설정'}\n과목: {subject}\n단원: {unit}\n현재 단계: {stage}"}]
+    context = [{
+        "role": "developer",
+        "content": (
+            f"{SOCRATIC_INSTRUCTIONS}\n"
+            f"학생 학년: {grade or '미설정'}\n"
+            f"과목: {subject}\n"
+            f"단원: {unit}\n"
+            f"현재 단계: {stage}"
+        ),
+    }]
     context.extend(messages[-8:])
     return context
 
+
 def get_socratic_reply(grade: str | None, subject: str, unit: str, stage: str, messages: list[dict]) -> str:
+    fallback = "좋아. 그 생각을 한 이유를 한 가지만 말해볼래?"
     if client is None:
-        return "좋아. 지금 네 생각에서 가장 중요한 이유 하나만 골라서 말해볼래?"
+        return fallback
+
     response = client.responses.create(
         model=MODEL,
         input=build_context(grade, subject, unit, stage, messages),
         store=False,
-        max_output_tokens=180,
+        max_output_tokens=120,
     )
-    return response.output_text.strip()
+
+    text = (response.output_text or "").strip()
+    return text if text else fallback
