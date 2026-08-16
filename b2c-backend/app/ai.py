@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from openai import OpenAI
 
-MODEL = os.getenv("OPENAI_MODEL", "gpt-5")
+MODEL = os.getenv("OPENAI_MODEL", "gpt-5-mini")
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) if os.getenv("OPENAI_API_KEY") else None
 
 SOCRATIC_INSTRUCTIONS = """너는 생각자국AI의 소크라테스형 학습코치다.
@@ -12,11 +12,13 @@ SOCRATIC_INSTRUCTIONS = """너는 생각자국AI의 소크라테스형 학습코
 짧고 자연스러운 한국어를 사용한다. 초등학생에게는 쉬운 생활어, 중고등학생에게는 교과 용어를 적절히 쓴다.
 대화 목적은 정답 획득이 아니라 생각 표현 → 이유 설명 → 반례/조건 확인 → 생각 수정 → 개념 연결 → 새로운 상황 적용이다.
 민감한 개인정보를 요구하지 않는다.
+응답은 특별한 설명이 필요한 경우가 아니면 1~3문장으로 짧게 한다.
+한 응답에서는 핵심 질문 하나에만 집중한다.
 """
 
 def build_context(grade: str | None, subject: str, unit: str, stage: str, messages: list[dict]) -> list[dict]:
     context = [{"role": "developer", "content": f"{SOCRATIC_INSTRUCTIONS}\n학생 학년: {grade or '미설정'}\n과목: {subject}\n단원: {unit}\n현재 단계: {stage}"}]
-    context.extend(messages[-16:])
+    context.extend(messages[-8:])
     return context
 
 def get_socratic_reply(grade: str | None, subject: str, unit: str, stage: str, messages: list[dict]) -> str:
@@ -26,5 +28,6 @@ def get_socratic_reply(grade: str | None, subject: str, unit: str, stage: str, m
         model=MODEL,
         input=build_context(grade, subject, unit, stage, messages),
         store=False,
+        max_output_tokens=180,
     )
     return response.output_text.strip()
